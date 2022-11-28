@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">AndroidQR_java</string>
-    <string name="hint">add text</string>
+    <string name="hint">text</string>
 </resources>
