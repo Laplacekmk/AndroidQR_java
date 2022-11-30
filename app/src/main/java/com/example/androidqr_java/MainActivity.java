@@ -32,6 +32,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -48,10 +49,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        toolBar();
 
         //ボタンを押してQRcode生成
         final Button buttonQR = binding.buttonQR;
         buttonQR.setOnClickListener(nvoQR);
+
+        //ボタンを推してcameraへ移動
+        final Button buttonCamera = binding.camera;
+        buttonCamera.setOnClickListener(nvoCamera);
+    }
+
+    private void toolBar()
+    {
+        //toolbar名前の変更
+        binding.myToolbar.setTitle(R.string.createQR);
+
+        //toolbarの表示
+        setSupportActionBar(binding.myToolbar);
     }
 
     //ボタン処理の変数化
@@ -128,4 +143,12 @@ public class MainActivity extends AppCompatActivity {
         // 結果を返す
         return pixels;
     }
+
+    private View.OnClickListener nvoCamera = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getApplication(), CameraView.class);
+            startActivity(intent);
+        }
+    };
 }

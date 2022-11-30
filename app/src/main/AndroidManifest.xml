@@ -12,6 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidQR_java"
         tools:targetApi="31">
+        <activity android:name=".CameraView"
+            android:parentActivityName=".MainActivity">
+            <!-- API レベル 15 以下をサポートする場合は、メタデータ タグが必要 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
