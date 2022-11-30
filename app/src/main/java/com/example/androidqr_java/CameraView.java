@@ -1,36 +1,103 @@
 package com.example.androidqr_java;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.SurfaceView;
+import android.view.WindowManager;
 import com.example.androidqr_java.databinding.ViewCameraBinding;
 
-public class CameraView extends AppCompatActivity {
+//カメラ関係
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.CameraActivity;
+import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
+
+import java.util.Collections;
+import java.util.List;
+
+public class CameraView extends CameraActivity implements CvCameraViewListener2 {
 
     private ViewCameraBinding binding;
+    private static final String TAG = "OCVSample::Activity";
+    private CameraBridgeViewBase mOpenCvCameraView;
+    private boolean              mIsJavaCamera = true;
+    private MenuItem             mItemSwitchCamera = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ViewCameraBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        toolBar();
+
+        Log.i(TAG, "called onCreate");
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        mOpenCvCameraView = binding.cameraView;
+        mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
+        mOpenCvCameraView.setCvCameraViewListener(this);
     }
 
-    private void toolBar()
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS: {
+                    Log.i(TAG, "OpenCV loaded successfully");
+                    mOpenCvCameraView.enableView();
+                }
+                break;
+                default: {
+                    super.onManagerConnected(status);
+                }
+                break;
+            }
+        }
+    };
+
+    @Override
+    public void onPause()
     {
-        //toolbarの表示
-        setSupportActionBar(binding.myToolbar);
+        super.onPause();
+        if (mOpenCvCameraView != null)
+            mOpenCvCameraView.disableView();
+    }
 
-        //ツールバーに対応するActionBarを取得
-        ActionBar ab = getSupportActionBar();
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
+        } else {
+            Log.d(TAG, "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
+    }
 
-        //名前の変更
-        ab.setTitle(R.string.camera);
+    @Override
+    protected List<? extends CameraBridgeViewBase> getCameraViewList() {
+        return Collections.singletonList(mOpenCvCameraView);
+    }
 
-        //アップボタンの実装
-        ab.setDisplayHomeAsUpEnabled(true);
+    public void onDestroy() {
+        super.onDestroy();
+        if (mOpenCvCameraView != null)
+            mOpenCvCameraView.disableView();
+    }
+
+    public void onCameraViewStarted(int width, int height) {
+    }
+
+    public void onCameraViewStopped() {
+    }
+
+    public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
+        return inputFrame.rgba();
     }
 }

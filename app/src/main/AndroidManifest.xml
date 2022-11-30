@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidQR_java"
         tools:targetApi="31">
+
+        <!--カメラ画面-->
         <activity android:name=".CameraView"
             android:parentActivityName=".MainActivity">
             <!-- API レベル 15 以下をサポートする場合は、メタデータ タグが必要 -->
@@ -19,6 +21,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <!--QR code作成画面-->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -33,5 +36,11 @@
                 android:value="" />
         </activity>
     </application>
+
+    <!--ユーザーにカメラの使用許可を求める-->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
 
 </manifest>

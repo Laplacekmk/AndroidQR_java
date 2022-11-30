@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".CameraView">
 
+    <!--toolbar-->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -15,5 +16,16 @@
         app:layout_constraintTop_toTopOf="parent"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <!--camera-->
+    <org.opencv.android.JavaCameraView
+        android:id="@+id/camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        app:camera_id="back"
+        app:show_fps="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
