@@ -1,7 +1,6 @@
 package com.example.androidqr_java;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.WindowManager;
@@ -23,10 +22,7 @@ import java.util.List;
 public class CameraView extends CameraActivity implements CvCameraViewListener2 {
 
     private ViewCameraBinding binding;
-    private static final String TAG = "OCVSample::Activity";
     private CameraBridgeViewBase mOpenCvCameraView;
-    private boolean              mIsJavaCamera = true;
-    private MenuItem             mItemSwitchCamera = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,20 +30,24 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
         binding = ViewCameraBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Log.i(TAG, "called onCreate");
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mOpenCvCameraView = binding.cameraView;
+        //カメラviewの可視化設定
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
+        //フレーム処理や描画等の、カメラとOpenCVライブラリとのやり取りを実装
         mOpenCvCameraView.setCvCameraViewListener(this);
     }
 
+    //BaseLoaderCallbackクラスのインスタンス生成
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        /*OpenCVライブラリの初期化後に呼び出されるコールバックメソッド
+          引数は初期化ステータス*/
         @Override
         public void onManagerConnected(int status) {
             switch (status) {
                 case LoaderCallbackInterface.SUCCESS: {
-                    Log.i(TAG, "OpenCV loaded successfully");
+                    //成功でカメラプレビュー開始
                     mOpenCvCameraView.enableView();
                 }
                 break;
@@ -59,23 +59,30 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
         }
     };
 
+    //ユーザーがActivityを離れたら呼び出される。処理は続く
     @Override
     public void onPause()
     {
         super.onPause();
+        //カメラviewが表示されていなければtrue
         if (mOpenCvCameraView != null)
+            //viewを無効にする
             mOpenCvCameraView.disableView();
     }
 
+    //ユーザーがActivityに戻ってきたら呼び出される
     @Override
     public void onResume()
     {
         super.onResume();
+        /*OpenCVのデバッグ:成功でtrueを返す
+                         失敗でfalseを返す*/
         if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            //失敗:OpenCVライブラリの読み込みと初期化を行う
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
-        } else {
-            Log.d(TAG, "OpenCV library found inside package. Using it!");
+        }
+        else {
+            //成功:カメラプレビュー開始
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
     }
@@ -85,18 +92,25 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
         return Collections.singletonList(mOpenCvCameraView);
     }
 
+    //アクテビティが破棄されるときに呼び出される
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        //カメラviewが表示されていなければtrue
         if (mOpenCvCameraView != null)
+            //viewを無効にする
             mOpenCvCameraView.disableView();
     }
 
+    //カメラのプレビューが開始されたときに呼び出される
     public void onCameraViewStarted(int width, int height) {
     }
 
+    //カメラプレビューが停止した時に呼び出される
     public void onCameraViewStopped() {
     }
 
+    //毎フレーム呼ばれる
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
         return inputFrame.rgba();
     }
