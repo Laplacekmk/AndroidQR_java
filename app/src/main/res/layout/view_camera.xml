@@ -28,4 +28,14 @@
         app:camera_id="back"
         app:show_fps="true"/>
 
+    <TextView
+        android:id="@+id/get_text"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textSize="30dp"
+        android:textColor="@color/white"
+        android:background="@color/clear"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
