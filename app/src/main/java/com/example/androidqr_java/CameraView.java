@@ -57,6 +57,7 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
 
     //Matは画像を配列で表したもの
     private Mat mRgba;
+    private Mat mGray;
 
     private QRCodeDetector mQRCodeDetector;
 
@@ -165,6 +166,7 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
     //カメラのプレビューが開始されたときに呼び出される
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat();
+        mGray = new Mat();
 
         Log_i("onCameraViewStarted");
     }
@@ -172,6 +174,7 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
     //カメラプレビューが停止した時に呼び出される
     public void onCameraViewStopped() {
         mRgba.release();
+        mGray.release();
         if (mPoints != null){
             mPoints.release();
         }
@@ -183,37 +186,45 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 
         mRgba = inputFrame.rgba();
+        mGray = inputFrame.rgba();
 
-        if (mQRCodeDetector.detect(mRgba, mPoints)) {
+        //QRcodeの検出
+        if (mQRCodeDetector.detect(mGray, mPoints)) {
             try {
-                result = mQRCodeDetector.decode(mRgba, mPoints);
+                //QRcodeの解析
+                result = mQRCodeDetector.decode(mGray, mPoints);
+
+                //取得した文字をtextviewにセット
+                if (result != null && result.length() > 0){
+                    //結果が取得でき、かつ1文字以上の時に
+                    //QRcode四角形の描画
+                    //文字の描画
+                    drawQuadrangle();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.getText.setText(result);
+                        }
+                    });
+                }
+                else{
+                    //取得した文字列の初期化
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.getText.setText(null);
+                        }
+                    });
+                }
             } catch (CvException e) {     //opencvのerrorクラス
                 e.printStackTrace();
             }
         }
 
-        //取得した文字をtextviewにセット
-        if (result != null && result.length() > 0){
-            drawQuadrangle();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                binding.getText.setText(result);
-                }
-            });
-        }
-        else{
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    binding.getText.setText(null);
-                }
-            });
-        }
-
         return mRgba;
     }
 
+    //QRcode四角形の描画
     private void drawQuadrangle() {
 
         int i  = 0;
@@ -234,8 +245,9 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
 
             // next point
             i2 = i + 1;
+
+            //ポイントが最後になったら最初につなげる
             if (i == 3 ) {
-                //ポイントが最後になったら最初につなげる
                 i2 = 0;
             }
 
