@@ -191,7 +191,7 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
         //QRcodeの検出
         if (mQRCodeDetector.detect(mGray, mPoints)) {
             try {
-                //QRcodeの解析
+                //QRcode解析
                 result = mQRCodeDetector.decode(mGray, mPoints);
 
                 //取得した文字をtextviewにセット
