@@ -70,16 +70,49 @@ public class MainActivity extends AppCompatActivity {
         final Button buttonCamera = binding.camera;
         buttonCamera.setOnClickListener(nvoCamera);
 
-        //googlesignin
+        //googleSignIn(公式：https://developers.google.com/identity/sign-in/android/sign-in)
+        //アカウントの基本情報とemailを取得するようにサインインを構成
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        //googleSignInAPIと対話するためのオブジェクト
         gsc = GoogleSignIn.getClient(this,gso);
 
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if(acct != null){
-            navigateToSecondActivity();
-        }
+        if(acct != null) navigateToSecondActivity();
+
         binding.googleBtn.setOnClickListener(nvoGs);
     }
+
+    private  View.OnClickListener nvoGs = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent signInIntent = gsc.getSignInIntent();
+            startActivityForResult(signInIntent,1000);
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestcode, int resultCode, Intent data){
+        super.onActivityResult(requestcode, resultCode, data);
+
+        if(requestcode == 1000){
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+            try {
+                //例外があれば再スロー
+                task.getResult(ApiException.class);
+                navigateToSecondActivity();
+            }catch (ApiException e){
+                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    void navigateToSecondActivity(){
+        finish();
+        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+        startActivity(intent);
+    }
+
 
     private void toolBar()
     {
@@ -108,36 +141,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
-    private  View.OnClickListener nvoGs = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent signInIntent = gsc.getSignInIntent();
-            startActivityForResult(signInIntent,1000);
-        }
-    };
-
-    @Override
-    protected void onActivityResult(int requestcode, int resultCode, Intent data){
-        super.onActivityResult(requestcode, resultCode, data);
-
-        if(requestcode == 1000){
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-            try {
-                task.getResult(ApiException.class);
-                navigateToSecondActivity();
-            }catch (ApiException e){
-                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    void navigateToSecondActivity(){
-        finish();
-        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-        startActivity(intent);
-    }
 
     private Bitmap createQRCode(String contents)
     {
