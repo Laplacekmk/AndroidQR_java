@@ -25,8 +25,8 @@ public class SecondActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
 
-    TextView name,email;
-    Button signOutBtn;
+    private TextView name,email;
+    private Button signOutBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,8 @@ public class SecondActivity extends AppCompatActivity {
 
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if(acct != null){
-            String personName = acct.getDisplayName();
-            String personEmail = acct.getEmail();
+            String personName = acct.getId();
+            String personEmail = acct.getIdToken();
             name.setText(personName);
             email.setText(personEmail);
         }
