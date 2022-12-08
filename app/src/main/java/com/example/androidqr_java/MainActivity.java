@@ -1,5 +1,7 @@
 package com.example.androidqr_java;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -19,6 +21,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.graphics.Color;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -44,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
+    GoogleSignInOptions gso;
+    GoogleSignInClient gsc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +69,16 @@ public class MainActivity extends AppCompatActivity {
         //ボタンを推してcameraへ移動
         final Button buttonCamera = binding.camera;
         buttonCamera.setOnClickListener(nvoCamera);
+
+        //googlesignin
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this,gso);
+
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if(acct != null){
+            navigateToSecondActivity();
+        }
+        binding.googleBtn.setOnClickListener(nvoGs);
     }
 
     private void toolBar()
@@ -87,6 +108,36 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    private  View.OnClickListener nvoGs = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent signInIntent = gsc.getSignInIntent();
+            startActivityForResult(signInIntent,1000);
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestcode, int resultCode, Intent data){
+        super.onActivityResult(requestcode, resultCode, data);
+
+        if(requestcode == 1000){
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+            try {
+                task.getResult(ApiException.class);
+                navigateToSecondActivity();
+            }catch (ApiException e){
+                Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    void navigateToSecondActivity(){
+        finish();
+        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+        startActivity(intent);
+    }
 
     private Bitmap createQRCode(String contents)
     {
