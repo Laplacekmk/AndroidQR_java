@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class CameraView extends CameraActivity implements CvCameraViewListener2 {
-
+//
     private ViewCameraBinding binding;
     private CameraBridgeViewBase mOpenCvCameraView;
 
