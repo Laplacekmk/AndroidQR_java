@@ -14,12 +14,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.net.URL;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -40,9 +44,12 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CipherSuite;
+import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.TlsVersion;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -52,78 +59,44 @@ public class SecondActivity extends AppCompatActivity {
     GoogleSignInClient gsc;
 
     private TextView name,email;
-    private Button signOutBtn;
+    private Button signOutBtn,addBtn,searchBtn;
+    private List<String> db_List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySecondBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        toolBar();
 
         name = binding.name;
         email = binding.email;
         signOutBtn = binding.signOut;
+        addBtn = binding.buttonAdd;
+        searchBtn = binding.buttonSearch;
 
-        //googleSignOut
+        //get accountData + googleSignOut
         {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
             gsc = GoogleSignIn.getClient(this, gso);
 
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
             if (acct != null) {
-                String personName = acct.getId();
-                String personEmail = acct.getIdToken();
+                String personName = acct.getDisplayName();
+                String personEmail = acct.getEmail();
                 name.setText(personName);
                 email.setText(personEmail);
             }
 
             signOutBtn.setOnClickListener(nvoSo);
         }
-        //httpリクエスト
-        try{
-            //okhttpを利用するカスタム関数（下記）
-            final URL GA_URL = new URL("https://script.google.com/macros/s/AKfycbyYQsYyqOxk6_J2fvUHEnnSJqA_Y-71AVEJ-LGvIL4/dev");
-            httpRequest(GA_URL);
-        }catch(Exception e){
-            Log.e("mmmmmmmmmmmm",e.getMessage());
-        }
-/*
-        //cloud database
-        // Set up URL parameters
-        Log.i("mmmmmmmm","ok6");
-        Properties connProps = new Properties();
-        connProps.setProperty("user", "laplacekmk"); // iam-user@gmail.com
-        connProps.setProperty("sslmode", "disable");
-        connProps.setProperty("socketFactory", "com.google.cloud.sql.postgres.SocketFactory");
-        connProps.setProperty("cloudSqlInstance", "laplacekmk:asia-northeast2:laplace-kmk2022");
-        connProps.setProperty("enableIamAuth", "true");
-        Log.i("mmmmmmmm","ok5");
-
-        new DownloadFilesTask().execute();
-
-
+        //dbから取得する情報を入力
+        addBtn.setOnClickListener(nvoAdd);
+        //httpとdbから指定した情報を取得
         {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Log.i("mmmmmmmm","ok");
 
-                Connection conn = connectionPool.getConnection();
 
-                PreparedStatement ps = conn.prepareStatement("select * from user");
-
-                ResultSet rs = ps.executeQuery();
-                Log.i("mmmmmmmm","ok2");
-
-                int i = rs.getInt("id");
-
-                String s = String.valueOf(i);
-                Log.i("mmmmmmm",s);
-
-            }catch (Exception e){
-
-            }
         }
-*/
     }
 
     void httpRequest(URL url) throws IOException{
@@ -134,39 +107,43 @@ public class SecondActivity extends AppCompatActivity {
         //request生成
         Request request = new Request.Builder()
                 .url(url)
+                .get()
                 .build();
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    Log.i("mmmmmmmmmm","no1");
+                    Log.i("mmmmmmmmmm","onFailure");
                 }
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    if(response.isSuccessful()) Log.i("mmmmmmmmm", "ok");
+                    if(response.isSuccessful()) {
+                        Log.i("mmmmmmmmm", "response Successful");
 
-                    final String jsonstr = response.body().string();
+                        final String jsonstr = response.body().string();
 
-                    Log.i("mmmmmmmm",jsonstr);
+                        Log.i("mmmmmmmm", jsonstr);
 
-                    try {
-                        Log.i("mmmmmmm","0");
-                        JSONObject json = new JSONObject(jsonstr);
-                        Log.i("mmmmmmm","1");
-                        final String status = json.getString("status");
-                        Log.i("mmmmmmm","2");
-                        Handler mainHandler = new Handler(Looper.getMainLooper());
-                        Log.i("mmmmmmm","3");
-                        mainHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.i("mmmmmmm", status);
-                            }
-                        });
-                    } catch (Exception e) {
-                        Log.i("mmmmmm","no2");
+                        try {
+                            JSONObject db_Json = new JSONObject(jsonstr);
+                            final String db_status = db_Json.getString("1");
+                            JSONObject Json = new JSONObject(db_status);
+                            final String status = Json.getString("NAME");
+                            Handler mainHandler = new Handler(Looper.getMainLooper());
+                            mainHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.i("mmmmmmm", status);
+                                }
+                            });
+                        } catch (Exception e) {
+                            Log.i("mmmmmm", "String to Json Failure");
 
+                        }
+                    }
+                    else{
+                        Log.i("mmmmmmmmm", "response Failure");
                     }
                 }
             });
@@ -185,4 +162,36 @@ public class SecondActivity extends AppCompatActivity {
             });
         }
     };
+
+    private  View.OnClickListener nvoAdd = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String editId = binding.editId.getText().toString();
+            String editName = binding.editName.getText().toString();
+            String editClass = binding.editClass.getText().toString();
+            if(editId != null) {
+                try {
+                    //okhttpを利用するカスタム関数（下記）
+                    final URL GA_URL = new URL(
+                            "https://script.google.com/macros/s/AKfycbxCTr04tOOEQs3C6CVZmEgthgSbhXVPZX6LUk5N0PezgPTyqBlCJxLCzw3OponhDrg7/exec"
+                                    + "?mode=add"
+                                    + "&id=" + editId
+                                    + "&name=" + editName
+                                    + "&class=" + editClass );
+                    httpRequest(GA_URL);
+                } catch (Exception e) {
+                    Log.e("mmmmmmmmmmmm", e.getMessage());
+                }
+            }
+        }
+    };
+
+    private void toolBar()
+    {
+        //toolbar名前の変更
+        binding.myToolbar.setTitle("Account");
+
+        //toolbarの表示
+        setSupportActionBar(binding.myToolbar);
+    }
 }
