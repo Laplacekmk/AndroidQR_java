@@ -150,23 +150,33 @@ public class SecondActivity extends AppCompatActivity {
                         final String jsonstr = response.body().string();
 
                         Log.i("mmmmmmmm", jsonstr);
+                        if (jsonstr.length() > 2) {
+                            try {
+                                JSONObject db_Json = new JSONObject(jsonstr);
+                                final String db_status = db_Json.getString(binding.searchID.getText().toString());
+                                JSONObject Json = new JSONObject(db_status);
+                                final String status = Json.getString("NAME");
+                                Handler mainHandler = new Handler(Looper.getMainLooper());
+                                mainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                            binding.getInfo.setText(status);
+                                            Log.i("mmmmmmm", status);
+                                    }
+                                });
+                            } catch (Exception e) {
+                                Log.i("mmmmmm", "String to Json Failure");
 
-                        try {
-                            JSONObject db_Json = new JSONObject(jsonstr);
-                            final String db_status = db_Json.getString(binding.searchID.getText().toString());
-                            JSONObject Json = new JSONObject(db_status);
-                            final String status = Json.getString("NAME");
+                            }
+                        }
+                        else {
                             Handler mainHandler = new Handler(Looper.getMainLooper());
                             mainHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    binding.getInfo.setText(status);
-                                    Log.i("mmmmmmm", status);
+                                    binding.getInfo.setText("no data");
                                 }
                             });
-                        } catch (Exception e) {
-                            Log.i("mmmmmm", "String to Json Failure");
-
                         }
                     }
                     else{
