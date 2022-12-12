@@ -1,4 +1,11 @@
 buildscript {
+    apply plugin: 'java'
+    apply plugin: 'application'
+
+    mainClassName = 'AppsScriptQuickstart'
+    sourceCompatibility = 11
+    targetCompatibility = 11
+    version = '1.0'
 
     repositories {
         // Make sure that you have the following two repositories
