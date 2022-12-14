@@ -43,11 +43,8 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import com.example.androidqr_java.databinding.ActivityMainBinding;
 
-import org.opencv.android.OpenCVLoader;
 
 public class MainActivity extends AppCompatActivity {
 

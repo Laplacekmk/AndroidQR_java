@@ -1,5 +1,7 @@
 package com.example.androidqr_java;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -21,6 +23,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -52,8 +57,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.api.client.json.JsonGenerator;
 import com.google.api.client.json.JsonParser;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.auth.oauth2.AccessToken;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.squareup.moshi.Moshi;
 
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -64,6 +72,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.CipherSuite;
 import okhttp3.ConnectionSpec;
+import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -83,7 +92,7 @@ public class SecondActivity extends AppCompatActivity {
     private Button signOutBtn,addBtn,searchBtn;
     private List<String> db_List;
 
-    private final String GA_URL = "https://script.google.com/macros/s/AKfycbwQj776-jZgfMEvd825-u6_jX4sNKvUpJSzIfJ3_vunMvhQmcy4aj9BS9FNp1TXaJxS/exec";
+    private final String GA_URL = "https://script.googleapis.com/v1/scripts/AKfycbzTTqJ-Tin2b9laNCJNbVVN4r7CLNt4XOPhL52daJ6BIDIx3gPppxi9FAQzu3PXJald:run";
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
 
     @Override
@@ -117,9 +126,14 @@ public class SecondActivity extends AppCompatActivity {
         //dbから取得する情報を入力
         addBtn.setOnClickListener(nvoAdd);
         searchBtn.setOnClickListener(nvoSearch);
-        //httpとdbから指定した情報を取得
+        //access token
         {
-
+            try {
+                AccessToken token = getScriptService();
+                Log.i("mmmmmmmmmm","access ok");
+            }catch (IOException e){
+                Log.i("mmmmmmmmmm",String.valueOf(e));
+            }
 
         }
     }
@@ -221,35 +235,35 @@ public class SecondActivity extends AppCompatActivity {
             }
         }
     };
-    //Apps Scrips OAuth 認証（未）
-    /*
-    private static HttpRequestInitializer setHttpTimeout() {
-        return new HttpRequestInitializer() {
-            final HttpRequestInitializer requestInitializer = new HttpRequestInitializer() {
-                @Override
-                public void initialize(HttpRequest request) throws IOException {
+    //Apps Scrips OAuth 認証（残骸）
 
-                }
-            }
+    private static HttpRequestInitializer setHttpTimeout(final HttpRequestInitializer requestInitializer) {
+        return new HttpRequestInitializer() {
             @Override
             public void initialize(HttpRequest httpRequest) throws IOException {
                 requestInitializer.initialize(httpRequest);
-                // This allows the API to call (and avoid timing out on)
-                // functions that take up to 6 minutes to complete (the maximum
-                // allowed script run time), plus a little overhead.
-                httpRequest.setReadTimeout(380000);
+                httpRequest.setConnectTimeout(3 * 60000);  // 3 minutes connect timeout
+                httpRequest.setReadTimeout(3 * 60000);  // 3 minutes read timeout
             }
         };
     }
-    public static Script getScriptService() throws IOException {
 
-        HttpTransport httpTransport = new NetHttpTransport();
-        JsonFactory JSON_FACTORY = new GsonFactory();
-        return new Script.Builder(
-                httpTransport, JSON_FACTORY, setHttpTimeout())
-                .setApplicationName("OAuth Laplacekmk")
-                .build();
-    }*/
+    public AccessToken getScriptService() throws IOException {
+        Log.i("mmmmmmmmmm","access no00");
+        File credential_file = new File("C:\\A_school\\team\\AndroidQR_java\\app\\libs\\credentials.json");
+
+        FileInputStream inputStream = openFileInput("libs\\credentials.json");
+        Log.i("mmmmmmmmmm", "no12");/*
+        GoogleCredentials credential = GoogleCredentials.fromStream(inputStream);
+        Log.i("mmmmmmmmmm","access no0");
+        credential.refreshIfExpired();
+        Log.i("mmmmmmmmmm","access no1");
+        AccessToken token = credential.getAccessToken();
+        Log.i("mmmmmmmmmm",String.valueOf(token));*/
+        return null;
+    }
+
+
     private  View.OnClickListener nvoSearch = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
