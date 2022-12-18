@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,9 +42,22 @@ import com.google.zxing.MultiFormatWriter;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.androidqr_java.databinding.ActivityMainBinding;
+import com.linecorp.linesdk.Constants;
+import com.linecorp.linesdk.LoginDelegate;
+import com.linecorp.linesdk.LoginListener;
+import com.linecorp.linesdk.Scope;
+import com.linecorp.linesdk.auth.LineAuthenticationParams;
+import com.linecorp.linesdk.auth.LineLoginApi;
+import com.linecorp.linesdk.auth.LineLoginResult;
+import com.linecorp.linesdk.widget.LoginButton;
+
+import java.net.URL;
+import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -54,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
     GoogleSignInClient gsc;
 
     final int GS_IN = 1000;
+
+    final int LS_IN = 1001;
+    private LoginDelegate loginDelegate = LoginDelegate.Factory.create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +101,53 @@ public class MainActivity extends AppCompatActivity {
         buttonsignin.setSize(SignInButton.SIZE_WIDE);
         buttonsignin.setColorScheme(SignInButton.COLOR_DARK);
         buttonsignin.setOnClickListener(nvoGs);
+
+        //line signIn
+        LoginButton buttonsignin_line = binding.lineLoginBtn;
+
+        buttonsignin_line.setChannelId("1657747561");
+
+        // configure whether login process should be done by Line App, or inside WebView.
+        buttonsignin_line.enableLineAppAuthentication(false);
+
+        // set up required scopes and nonce.
+        buttonsignin_line.setAuthenticationParams(new LineAuthenticationParams
+                .Builder()
+                .scopes(Arrays.asList(Scope.PROFILE))
+                // .nonce("<a randomly-generated string>") // nonce can be used to improve security
+                .build()
+        );
+        buttonsignin_line.setLoginDelegate(loginDelegate);
+        buttonsignin_line.addLoginListener(new LoginListener() {
+            @Override
+            public void onLoginSuccess(@NonNull LineLoginResult result) {
+                Log.i("mmmmmmmmm","line ok");
+            }
+
+            @Override
+            public void onLoginFailure(@Nullable LineLoginResult result) {
+                Log.i("mmmmmmmmm","line no");
+            }
+        });
+
+        buttonsignin_line.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    // App-to-app login
+                    Intent loginIntent = LineLoginApi.getLoginIntent(
+                            view.getContext(),
+                            "1657747561",
+                            new LineAuthenticationParams.Builder()
+                                    .scopes(Arrays.asList(Scope.PROFILE))
+                                    // .nonce("<a randomly-generated string>") // nonce can be used to improve security
+                                    .build());
+                    startActivityForResult(loginIntent, LS_IN);
+                }catch(Exception e) {
+                    Log.e("mmmmmmmmmmm", e.toString());
+                }
+            }
+        });
     }
 
     //googleSignInボタン処理
@@ -108,12 +172,43 @@ public class MainActivity extends AppCompatActivity {
                 //SignInが成功しているか確認後、画面遷移
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 String token_id = account.getIdToken();
-                Log.i("MMMMM",token_id);
+                Log.i("mmmmmm",token_id);
 
                 if(account != null)navigateToSecondActivity();
             }catch (ApiException e){
                 Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
             }
+        }
+
+        //lineからの戻り
+        if (requestcode == LS_IN) {
+
+            LineLoginResult result = LineLoginApi.getLoginResultFromIntent(data);
+            Log.i("mmmmmmmm","nonoise.zero@gmail.com");
+
+            switch (result.getResponseCode()) {
+
+                case SUCCESS:
+                    // Login successful
+                    String accessToken = result.getLineCredential().getAccessToken().getTokenString();
+
+                    Log.i("mmmmmmmm",accessToken);
+                    break;
+
+                case CANCEL:
+                    // Login canceled by user
+                    Log.i("mmmmmmmmm", "LINE Login Canceled by user.");
+                    break;
+
+                default:
+                    // Login canceled due to other error
+                    Log.i("mmmmmmmm", "Login FAILED!");
+                    Log.i("mmmmmmmmm", result.getErrorData().toString());
+            }
+        }
+        else if (requestcode != LS_IN){
+            Log.i("mmmmmmmmm", "Unsupported Request");
+            return;
         }
     }
 
