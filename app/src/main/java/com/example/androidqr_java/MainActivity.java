@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        toolBar();
 
         //ボタンを押してQRcode生成
         final Button buttonQR = binding.buttonQR;
@@ -123,16 +122,6 @@ public class MainActivity extends AppCompatActivity {
         finish();
         Intent intent = new Intent(MainActivity.this, SecondActivity.class);
         startActivity(intent);
-    }
-
-
-    private void toolBar()
-    {
-        //toolbar名前の変更
-        binding.myToolbar.setTitle(R.string.createQR);
-
-        //toolbarの表示
-        setSupportActionBar(binding.myToolbar);
     }
 
     //ボタン処理の変数化
