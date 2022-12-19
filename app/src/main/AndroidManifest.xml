@@ -2,6 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- カメラの使用を宣言、許可取り -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <!-- ユーザーアカウント取得用パーミッション -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- インターネット -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,17 +22,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidQR_java"
-        tools:targetApi="31">
-
-        <!--カメラ画面-->
-        <activity android:name=".CameraView"
-            android:parentActivityName=".MainActivity">
+        tools:replace="android:allowBackup"
+        tools:targetApi="32">
+        <activity
+            android:name=".SecondActivity"
+            android:parentActivityName=".MainActivity"
+            android:exported="false">
             <!-- API レベル 15 以下をサポートする場合は、メタデータ タグが必要 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <!--QR code作成画面-->
+        <!-- カメラ画面 -->
+        <activity
+            android:name=".CameraView"
+            android:parentActivityName=".MainActivity"
+            android:exported="false">
+
+            <!-- API レベル 15 以下をサポートする場合は、メタデータ タグが必要 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity> <!-- QR code作成画面 -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -36,11 +58,5 @@
                 android:value="" />
         </activity>
     </application>
-
-    <!--カメラの使用を宣言、許可取り-->
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-
 
 </manifest>
