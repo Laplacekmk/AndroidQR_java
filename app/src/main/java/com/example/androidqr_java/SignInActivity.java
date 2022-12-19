@@ -86,9 +86,9 @@ public class SignInActivity extends AppCompatActivity {
 
         //line signIn(公式：https://developers.line.biz/ja/docs/android-sdk/integrate-line-login/)
         LoginButton buttonsignin_line = binding.lineLoginBtn;
-        buttonsignin_line.setChannelId(String.valueOf(R.string.chanelID));
+        buttonsignin_line.setChannelId(getString(R.string.chanelID));
         //ログイン処理をLINEアプリで行うか、WebView内で行うかを設定します。
-        buttonsignin_line.enableLineAppAuthentication(false);
+        buttonsignin_line.enableLineAppAuthentication(true);
         // 必要なスコープ(情報)を設定。今回の場合は、基本的なプロフィールのみ
         buttonsignin_line.setAuthenticationParams(new LineAuthenticationParams
                 .Builder()
@@ -128,13 +128,13 @@ public class SignInActivity extends AppCompatActivity {
         public void onClick(View view) {
             try{
                 // App-to-app login
-                Intent loginIntent = LineLoginApi.getLoginIntent(
+                Intent signInIntent = LineLoginApi.getLoginIntent(
                         view.getContext(),
-                        String.valueOf(R.string.chanelID),
+                        getString(R.string.chanelID),
                         new LineAuthenticationParams.Builder()
                                 .scopes(Arrays.asList(Scope.PROFILE))
                                 .build());
-                startActivityForResult(loginIntent, LS_IN);
+                startActivityForResult(signInIntent, LS_IN);
             }catch(Exception e) {
                 Log.e("mmmmmmmmmmm", e.toString());
             }
@@ -143,26 +143,29 @@ public class SignInActivity extends AppCompatActivity {
 
     //ログイン処理後の処理
     @Override
-    protected void onActivityResult(int requestcode, int resultCode, Intent data){
-        super.onActivityResult(requestcode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
 
         //googleSignInからの戻りの場合
-        if(requestcode == GS_IN){
+        if(requestCode == GS_IN){
+            Log.i("mmmmmm","goo");
             //GoogleSignInAccountオブジェクトにはアカウント情報が含まれている
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 //SignInが成功しているか確認後、画面遷移
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 if(account != null)navigateToSecondActivity();
+                return;
             }catch (ApiException e){
                 Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
+                return;
             }
         }
 
         //lineからの戻り
-        if (requestcode == LS_IN) {
+        if (requestCode == LS_IN) {
+            Log.i("mmmmmm","line");
             LineLoginResult result = LineLoginApi.getLoginResultFromIntent(data);
-            Log.i("mmmmmmmm","nonoise.zero@gmail.com");
             switch (result.getResponseCode()) {
                 case SUCCESS:
                     // Login successful
@@ -178,8 +181,9 @@ public class SignInActivity extends AppCompatActivity {
                     Log.i("mmmmmmmm", "Login FAILED!");
                     Log.i("mmmmmmmmm", result.getErrorData().toString());
             }
+            return;
         }
-        else if (requestcode != LS_IN){
+        else if (requestCode != LS_IN){
             Log.i("mmmmmmmmm", "Unsupported Request");
             return;
         }
@@ -188,7 +192,7 @@ public class SignInActivity extends AppCompatActivity {
     //ログイン後画面へ
     void navigateToSecondActivity(){
         finish();
-        Intent intent = new Intent(SignInActivity.this, SecondActivity.class);
+        Intent intent = new Intent(SignInActivity.this,SecondActivity.class);
         startActivity(intent);
     }
 }

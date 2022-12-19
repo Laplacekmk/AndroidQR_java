@@ -24,42 +24,42 @@
         <activity
             android:name=".SignInActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".SecondActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity">
-
-            <!-- API レベル 15 以下をサポートする場合は、メタデータ タグが必要 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity> <!-- カメラ画面 -->
+        <!-- カメラ画面 -->
         <activity
             android:name=".CameraView"
-            android:exported="false"
-            android:parentActivityName=".MainActivity">
+            android:exported="false">
 
             <!-- API レベル 15 以下をサポートする場合は、メタデータ タグが必要 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity> <!-- QR code作成画面 -->
+                android:value=".SignInActivity" />
+        </activity>
+        <!-- QR code作成画面 -->
         <activity
             android:name=".MainActivity"
             android:exported="false">
 
             <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SignInActivity" />
+        </activity>
+        <activity
+            android:name=".SecondActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- API レベル 15 以下をサポートする場合は、メタデータ タグが必要 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SignInActivity" />
         </activity>
     </application>
 

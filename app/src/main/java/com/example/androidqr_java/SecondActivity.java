@@ -1,13 +1,5 @@
 package com.example.androidqr_java;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,15 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.example.androidqr_java.databinding.ActivitySecondBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.api.client.json.JsonGenerator;
-import com.google.api.client.json.JsonParser;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.auth.oauth2.AccessToken;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.squareup.moshi.Moshi;
 
-import org.checkerframework.checker.units.qual.A;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.json.JSONException;
 
@@ -75,15 +59,14 @@ public class SecondActivity extends AppCompatActivity {
     private Button signOutBtn,addBtn,searchBtn;
     private List<String> db_List;
 
-    private final String GA_URL = String.valueOf(R.string.GAS_URL);
-    private static final MediaType MIMEType = MediaType.get(String.valueOf(R.string.MediaType));
+    private final String GA_URL = getString(R.string.GAS_URL);
+    private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySecondBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        toolBar();
 
         name = binding.name;
         email = binding.email;
@@ -91,8 +74,9 @@ public class SecondActivity extends AppCompatActivity {
         addBtn = binding.buttonAdd;
         searchBtn = binding.buttonSearch;
 
+        Log.i("mmmmmmm","lolo");
         //get accountData + googleSignOut
-        {
+        try {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
             gsc = GoogleSignIn.getClient(this, gso);
             acct = GoogleSignIn.getLastSignedInAccount(this);
@@ -103,13 +87,15 @@ public class SecondActivity extends AppCompatActivity {
                 name.setText(personName);
                 email.setText(personEmail);
             }
-
-            signOutBtn.setOnClickListener(nvoSo);
+        }catch (Exception e){
+            Log.i("mmmmmmmm","noacc");
         }
+        signOutBtn.setOnClickListener(nvoSo);
+
         //dbから取得する情報を入力
         addBtn.setOnClickListener(nvoAdd);
         searchBtn.setOnClickListener(nvoSearch);
-        //access token
+        /*access token
         {
             try {
                 AccessToken token = getScriptService();
@@ -118,7 +104,7 @@ public class SecondActivity extends AppCompatActivity {
                 Log.i("mmmmmmmmmm",String.valueOf(e));
             }
 
-        }
+        }*/
     }
 
     void httpRequest(String url,String json) throws IOException{
@@ -191,7 +177,7 @@ public class SecondActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     finish();
-                    startActivity(new Intent(SecondActivity.this, MainActivity.class));
+                    startActivity(new Intent(SecondActivity.this, SignInActivity.class));
                 }
             });
         }
@@ -218,7 +204,7 @@ public class SecondActivity extends AppCompatActivity {
             }
         }
     };
-    //Apps Scrips OAuth 認証（残骸）
+    /*Apps Scrips OAuth 認証（残骸）
 
     private static HttpRequestInitializer setHttpTimeout(final HttpRequestInitializer requestInitializer) {
         return new HttpRequestInitializer() {
@@ -242,10 +228,9 @@ public class SecondActivity extends AppCompatActivity {
         credential.refreshIfExpired();
         Log.i("mmmmmmmmmm","access no1");
         AccessToken token = credential.getAccessToken();
-        Log.i("mmmmmmmmmm",String.valueOf(token));*/
+        Log.i("mmmmmmmmmm",String.valueOf(token));
         return null;
-    }
-
+    }*/
 
     private  View.OnClickListener nvoSearch = new View.OnClickListener() {
         @Override
@@ -274,12 +259,4 @@ public class SecondActivity extends AppCompatActivity {
             }
         }
     };
-    private void toolBar()
-    {
-        //toolbar名前の変更
-        binding.myToolbar.setTitle("Account");
-
-        //toolbarの表示
-        setSupportActionBar(binding.myToolbar);
-    }
 }
