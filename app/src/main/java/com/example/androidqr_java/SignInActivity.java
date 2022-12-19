@@ -192,7 +192,7 @@ public class SignInActivity extends AppCompatActivity {
     //ログイン後画面へ
     void navigateToSecondActivity(){
         finish();
-        Intent intent = new Intent(SignInActivity.this,SecondActivity.class);
+        Intent intent = new Intent(SignInActivity.this,MainActivity.class);
         startActivity(intent);
     }
 }

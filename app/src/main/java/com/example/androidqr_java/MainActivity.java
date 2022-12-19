@@ -68,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
         //cameraへ移動
         final Button buttonCamera = binding.camera;
         buttonCamera.setOnClickListener(nvoCamera);
+
+        //secondActivityへ遷移
+        final Button buttonSecond = binding.information;
+        buttonSecond.setOnClickListener(nvoSecond);
     }
 
     //ボタン処理の変数化
@@ -148,7 +152,15 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener nvoCamera = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(getApplication(), CameraView.class);
+            Intent intent = new Intent(MainActivity.this, CameraView.class);
+            startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener nvoSecond = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
             startActivity(intent);
         }
     };

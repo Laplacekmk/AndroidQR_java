@@ -55,11 +55,10 @@ public class SecondActivity extends AppCompatActivity {
     GoogleSignInClient gsc;
     GoogleSignInAccount acct;
 
+    private String GAS_URL;
     private TextView name,email;
     private Button signOutBtn,addBtn,searchBtn;
-    private List<String> db_List;
 
-    private final String GA_URL = getString(R.string.GAS_URL);
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
 
     @Override
@@ -68,13 +67,14 @@ public class SecondActivity extends AppCompatActivity {
         binding = ActivitySecondBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        GAS_URL = getString(R.string.GAS_URL);
         name = binding.name;
         email = binding.email;
         signOutBtn = binding.signOut;
         addBtn = binding.buttonAdd;
         searchBtn = binding.buttonSearch;
 
-        Log.i("mmmmmmm","lolo");
+
         //get accountData + googleSignOut
         try {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
@@ -197,7 +197,7 @@ public class SecondActivity extends AppCompatActivity {
                                     "\"name\":\""+ editName +"\"," +
                                     "\"class\":\""+ editClass +"\"" +
                                     "}";
-                    httpRequest(GA_URL,json);
+                    httpRequest(GAS_URL,json);
                 } catch (Exception e) {
                     Log.e("mmmmmmmmmmmm", e.getMessage());
                 }
@@ -249,7 +249,7 @@ public class SecondActivity extends AppCompatActivity {
                     try {
                         //okhttpを利用するカスタム関数（下記）
                         String json = "{\"mode\":\"search\", \"id\":\"" + editId + "\"}";
-                        httpRequest(GA_URL, json);
+                        httpRequest(GAS_URL, json);
                     } catch (Exception e) {
                         Log.e("mmmmmmmmmmmm", e.getMessage());
                     }
