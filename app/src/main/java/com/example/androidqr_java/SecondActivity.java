@@ -25,24 +25,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLStreamHandler;
-import java.nio.charset.Charset;
-import java.sql.Array;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -92,8 +75,8 @@ public class SecondActivity extends AppCompatActivity {
     private Button signOutBtn,addBtn,searchBtn;
     private List<String> db_List;
 
-    private final String GA_URL = "https://script.googleapis.com/v1/scripts/AKfycbzTTqJ-Tin2b9laNCJNbVVN4r7CLNt4XOPhL52daJ6BIDIx3gPppxi9FAQzu3PXJald:run";
-    private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
+    private final String GA_URL = String.valueOf(R.string.GAS_URL);
+    private static final MediaType MIMEType = MediaType.get(String.valueOf(R.string.MediaType));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
