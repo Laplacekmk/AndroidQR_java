@@ -32,6 +32,11 @@ android {
     packagingOptions {
         resources.excludes.add("META-INF/*")
     }
+    externalNativeBuild {
+        cmake{
+            path "CMakeLists.txt"
+        }
+    }
 }
 
 dependencies {

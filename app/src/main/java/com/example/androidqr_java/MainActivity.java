@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         //secondActivityへ遷移
         final Button buttonSecond = binding.information;
         buttonSecond.setOnClickListener(nvoSecond);
+
     }
 
     //ボタン処理の変数化
@@ -164,4 +165,5 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
 }

@@ -88,7 +88,7 @@ public class SecondActivity extends AppCompatActivity {
                 email.setText(personEmail);
             }
         }catch (Exception e){
-            Log.i("mmmmmmmm","noacc");
+            Log.i("mmmmmmmm","noaccount");
         }
         signOutBtn.setOnClickListener(nvoSo);
 

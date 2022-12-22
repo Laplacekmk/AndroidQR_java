@@ -8,7 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.view.LayoutInflater;
@@ -16,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.Color;
 
@@ -56,13 +62,27 @@ public class SignInActivity extends AppCompatActivity {
     private ActivitySignInBinding binding;
 
     //google sign in
+    ImageView buttonGoogle;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     final int GS_IN = 1000;
 
     //line sign in
+    ImageView buttonLINE;
     private LoginDelegate loginDelegate = LoginDelegate.Factory.create();
     final int LS_IN = 1001;
+
+    /**
+     * C/C++ライブラリを読み込みさせる
+     **/
+    static {
+        System.loadLibrary("ulid");
+    }
+
+    ScaleAnimation btnEffect = new ScaleAnimation(
+            1.0f, 0.9f, 1.0f, 0.9f,
+            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +99,10 @@ public class SignInActivity extends AppCompatActivity {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if(account != null) navigateToSecondActivity();
         //ボタンのレイアウトと配置
-        final SignInButton buttonsignin = binding.signInButton;
-        buttonsignin.setSize(SignInButton.SIZE_WIDE);
-        buttonsignin.setColorScheme(SignInButton.COLOR_DARK);
-        buttonsignin.setOnClickListener(nvoGs);
+        buttonGoogle = binding.googleLogin;
+        buttonGoogle.setOnClickListener(nvoGs);
 
+        /*
         //line signIn(公式：https://developers.line.biz/ja/docs/android-sdk/integrate-line-login/)
         LoginButton buttonsignin_line = binding.lineLoginBtn;
         buttonsignin_line.setChannelId(getString(R.string.chanelID));
@@ -108,17 +127,56 @@ public class SignInActivity extends AppCompatActivity {
             public void onLoginFailure(@Nullable LineLoginResult result) {
                 Log.i("mmmmmmmmm","line no");
             }
-        });
+        });*/
+        //buttonsignin_line.setOnClickListener(nvoLs);
+
         //ボタン処理
-        buttonsignin_line.setOnClickListener(nvoLs);
+        buttonLINE = binding.lineLogin;
+        buttonLINE.setOnClickListener(nvoLs);
+
+        Button buttonULID = binding.ULID;
+        buttonULID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView text = binding.ULIDText;
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        text.setText(getULID());
+                        finish();
+                        Intent intent = new Intent(SignInActivity.this,CreateAccountActivity.class);
+                        startActivity(intent);
+                    }
+                });
+            }
+        });
     }
 
     //googleSignInボタン処理
     private  View.OnClickListener nvoGs = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent signInIntent = gsc.getSignInIntent();
-            startActivityForResult(signInIntent,GS_IN);
+            btnEffect.setDuration(400);
+            btnEffect.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    Log.i("mmmmmmmmm",String.valueOf(animation));
+                    Intent signInIntent = gsc.getSignInIntent();
+                    startActivityForResult(signInIntent,GS_IN);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            buttonGoogle.startAnimation(btnEffect);
         }
     };
 
@@ -126,18 +184,36 @@ public class SignInActivity extends AppCompatActivity {
     private  View.OnClickListener nvoLs = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            try{
-                // App-to-app login
-                Intent signInIntent = LineLoginApi.getLoginIntent(
-                        view.getContext(),
-                        getString(R.string.chanelID),
-                        new LineAuthenticationParams.Builder()
-                                .scopes(Arrays.asList(Scope.PROFILE))
-                                .build());
-                startActivityForResult(signInIntent, LS_IN);
-            }catch(Exception e) {
-                Log.e("mmmmmmmmmmm", e.toString());
-            }
+            btnEffect.setDuration(400);
+            btnEffect.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    Log.i("mmmmmmmmm",String.valueOf(animation));
+                    try{
+                        // App-to-app login
+                        Intent signInIntent = LineLoginApi.getLoginIntent(
+                                view.getContext(),
+                                getString(R.string.chanelID),
+                                new LineAuthenticationParams.Builder()
+                                        .scopes(Arrays.asList(Scope.PROFILE))
+                                        .build());
+                        startActivityForResult(signInIntent, LS_IN);
+                    }catch(Exception e) {
+                        Log.e("mmmmmmmmmmm", e.toString());
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            buttonLINE.startAnimation(btnEffect);
         }
     };
 
@@ -148,7 +224,6 @@ public class SignInActivity extends AppCompatActivity {
 
         //googleSignInからの戻りの場合
         if(requestCode == GS_IN){
-            Log.i("mmmmmm","goo");
             //GoogleSignInAccountオブジェクトにはアカウント情報が含まれている
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -164,7 +239,6 @@ public class SignInActivity extends AppCompatActivity {
 
         //lineからの戻り
         if (requestCode == LS_IN) {
-            Log.i("mmmmmm","line");
             LineLoginResult result = LineLoginApi.getLoginResultFromIntent(data);
             switch (result.getResponseCode()) {
                 case SUCCESS:
@@ -195,4 +269,9 @@ public class SignInActivity extends AppCompatActivity {
         Intent intent = new Intent(SignInActivity.this,MainActivity.class);
         startActivity(intent);
     }
+
+    /**
+     * C/C++のネイティブメソッドを宣言
+     **/
+    public native String getULID();
 }

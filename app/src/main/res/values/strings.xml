@@ -3,12 +3,21 @@
     <string name="createQR">create QRcode</string>
     <string name="hint">add text</string>
     <string name="camera">camera</string>
+    <string name="createAccount">アカウント作成</string>
     <!--google-->
+    <string name="login_google">Googleでログイン</string>
     <string name="google">google</string>
     <string name="server_client_id">672366818124-qvd8n08dll3m57f9nq0p2koc2rcd27i7.apps.googleusercontent.com</string>
     <string name="GAS_URL">https://script.googleapis.com/v1/scripts/AKfycbzTTqJ-Tin2b9laNCJNbVVN4r7CLNt4XOPhL52daJ6BIDIx3gPppxi9FAQzu3PXJald:run</string>
     <string name="MediaType">application/json; charset=utf-8</string>
     <!--line-->
+    <string name="login_line">LINEでログイン</string>
     <string name="chanelID">1657747561</string>
-
+    <!--createAccount-->
+    <!--game-->
+    <string-array name="list_game">
+        <item>PlayStation</item>
+        <item>Switch</item>
+        <item>パソコン</item>
+    </string-array>
 </resources>
