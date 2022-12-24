@@ -4,23 +4,112 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".CreateAccountActivity">
-
-    <ImageView
-        android:id="@+id/image_"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/caa_button_animation1" />
-
-    <ListView
-        android:id="@+id/listView"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/image_game"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:layout_centerHorizontal="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:srcCompat="@drawable/caa_button_animation1" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ゲーム"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="@id/image_game"
+                app:layout_constraintBottom_toBottomOf="@id/image_game"/>
+            <com.example.androidqr_java.CustomListView
+                android:id="@+id/list_game"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="4dp"
+                android:layout_marginTop="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/image_game"/>
+            <ImageView
+                android:id="@+id/image_sport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/list_game"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:srcCompat="@drawable/caa_button_animation1"/>
+            <TextView
+                android:id="@+id/text_sport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="スポーツ"
+                android:textSize="20dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toTopOf="@id/image_sport"
+                app:layout_constraintBottom_toBottomOf="@id/image_sport"/>
+            <com.example.androidqr_java.CustomListView
+                android:id="@+id/list_sport"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="4dp"
+                android:layout_marginTop="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/image_sport"/>
+            <ImageView
+                android:id="@+id/image_reading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/list_sport"
+                app:srcCompat="@drawable/caa_button_animation1"/>
+            <com.example.androidqr_java.CustomListView
+                android:id="@+id/list_reading"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="4dp"
+                android:layout_marginTop="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/image_reading"/>
+            <ImageView
+                android:id="@+id/image_trip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/list_reading"
+                app:srcCompat="@drawable/caa_button_animation1"/>
+            <com.example.androidqr_java.CustomListView
+                android:id="@+id/list_trip"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="4dp"
+                android:layout_marginTop="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/image_trip"/>
+            <ImageView
+                android:id="@+id/image_SNS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/list_trip"
+                app:srcCompat="@drawable/caa_button_animation1"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

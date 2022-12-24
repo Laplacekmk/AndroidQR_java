@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,14 +15,21 @@ import android.content.res.Resources;
 
 import com.example.androidqr_java.databinding.ListItemsBinding;
 
+import org.checkerframework.common.initializedfields.qual.EnsuresInitializedFields;
+
+import java.util.List;
+import java.util.Map;
+
 public class ListvewAdapter extends BaseAdapter {
 
     private ListItemsBinding binding;
-
+    private Context conText;
     private LayoutInflater inflater;
     private int layoutID;
-    private String[] nameList;
+    private List nameList;
+    private List<Drawable> drawableList;
     private Drawable drawables;
+    private Map<String,Drawable> listMap;
 
     static class ViewHolder {
         TextView text;
@@ -28,11 +37,12 @@ public class ListvewAdapter extends BaseAdapter {
     }
 
     ListvewAdapter(Context context, int itemLayoutId,
-                   String[] names, Drawable drawable) {
+                   List names, List drawable) {
+        conText = context;
         inflater = LayoutInflater.from(context);
         layoutID = itemLayoutId;
         nameList = names;
-        drawables = drawable;
+        drawableList = drawable;
     }
 
     // getViewメソッドをOverride
@@ -52,15 +62,16 @@ public class ListvewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.img.setImageDrawable(drawables);
+        holder.img.setImageDrawable(drawableList.get(position));
 
-        holder.text.setText(nameList[position]);
+        holder.text.setText(nameList.get(position).toString());
 
+        convertView.startAnimation(AnimationUtils.loadAnimation(conText,R.anim.caa_list_animation));
         return convertView;
     }
 
     @Override
-    public int getCount() {return nameList.length; }
+    public int getCount() {return nameList.size(); }
     @Override
     public Object getItem(int position) {
         return position;
