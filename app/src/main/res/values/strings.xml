@@ -14,10 +14,6 @@
     <string name="login_line">LINEでログイン</string>
     <string name="chanelID">1657747561</string>
     <!--createAccount-->
-    <!--game-->
-    <string-array name="list_game">
-        <item>PlayStation</item>
-        <item>Switch</item>
-        <item>パソコン</item>
-    </string-array>
+    <string name="caa_top">好きなものを選んでください</string>
+    <string name="caa_next">つぎへ</string>
 </resources>

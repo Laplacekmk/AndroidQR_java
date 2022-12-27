@@ -1,6 +1,7 @@
 package com.example.androidqr_java;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,13 +11,17 @@ import androidx.transition.TransitionManager;
 
 import com.example.androidqr_java.databinding.ActivityCreateAccountBinding;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -44,72 +50,131 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private ActivityCreateAccountBinding binding;
 
-    ImageView button;
-
-    private int i;
-
     //---------------------------------------
-    private static final String[] names = {
-            "PlayStation",
-            "Switch",
-            "パソコン"
+    public int i;
+    private boolean caa_frag = false;
+
+    public Map<String,Integer> item_map= new HashMap<String,Integer>();
+    private enum numTitles {
+        outdoor,
+        trip,
+        reading,
+        sns,
+        anime,
+        game,
+        movie,
+        music,
+        gourmet,
+        gambling
+    }
+    private static final String[] titles = {
+            "アウトドア",
+            "旅行",
+            "読書",
+            "SNS",
+            "アニメ/漫画",
+            "ゲーム",
+            "映画鑑賞",
+            "音楽鑑賞",
+            "グルメ",
+            "ギャンブル"
     };
-    Drawable drawable;
-    private List<String> name_list = new ArrayList<>(){
+    private List<String> outdoor_items = new ArrayList<>(){
         {
-            add("ゲーム");
+            add("ランニング/ウォーキング");
+            add("ジム");
+            add("球技");
+            add("釣り");
+            add("キャンプ");
+            add("ウィンタースポーツ");
+        }
+    };
+    private List<String> trip_items = new ArrayList<>(){
+        {
+            add("国内旅行");
+            add("海外旅行");
+        }
+    };
+    private List<String> reading_items = new ArrayList<>(){
+        {
+            add("日本文学");
+            add("海外文学");
+            add("洋書");
+            add("純文学");
+            add("ミステリ");
+            add("SF小説");
+        }
+    };
+    private List<String> sns_items = new ArrayList<>(){
+        {
+            add("twitter");
+            add("instagram");
+            add("facebook");
+            add("tiktok");
+            add("youtube");
+        }
+    };
+    private List<String> anime_items = new ArrayList<>(){
+        {
+            add("SF");
+            add("バトル");
+            add("ギャグ");
+            add("ラブコメ");
+            add("日常");
             add("スポーツ");
-            add("読書");
-            add("旅行");
-            add("旅行");
+            add("サスペンス/ホラー");
         }
     };
-    private List<String> list_game = new ArrayList<>(){
+    private List<String> game_items = new ArrayList<>(){
         {
-            add("aaaaaa");
-            add("bbbbbb");
-            add("cccccc");
+            add("シューティングゲーム");
+            add("ホラーゲーム");
+            add("スポーツゲーム");
+            add("RPG");
         }
     };
-    private List<String> list_sport = new ArrayList<>(){
+    private List<String> movie_items = new ArrayList<>(){
         {
-            add("dddddd");
-            add("eeeeee");
-            add("ffffff");
+            add("アクション");
+            add("SF");
+            add("サスペンス/ホラー");
+            add("戦争");
+            add("恋愛");
+            add("コメディ");
+            add("ミュージカル");
         }
     };
-    private List<String> list_reading = new ArrayList<>(){
+    private List<String> music_items = new ArrayList<>(){
         {
-            add("gggggg");
-            add("hhhhhh");
-            add("iiiiii");
+            add("j-pop");
+            add("k-pop");
+            add("洋楽");
+            add("アイドル");
+            add("バンド");
         }
     };
-    private List<String> list_trip = new ArrayList<>(){
+    private List<String> gourmet_items = new ArrayList<>(){
         {
-            add("jjjjjj");
-            add("kkkkkk");
-            add("llllll");
+            add("和食");
+            add("洋食");
+            add("フレンチ");
+            add("中華");
         }
     };
-    private List<List<String>> list_all = new ArrayList<>(){
+    private List<String> gambling_items = new ArrayList<>(){
         {
-            add(list_game);
-            add(list_sport);
-            add(list_reading);
-            add(list_trip);
-            add(list_trip);
+            add("競馬");
+            add("ボートレース");
+            add("パチンコ");
+            add("宝くじ");
         }
     };
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapterR1;
-    private RecyclerView.Adapter adapterR2;
-    private RecyclerView.Adapter adapterR3;
-    private RecyclerView.LayoutManager layoutManager;
-    private List<Drawable> drawables_list;
+    public RecyclerView recyclerView_Rear;
 
-    BaseAdapter adapter;
+    private Animation next_go;
+    private Animation next_back;
     //---------------------------------------
 
     @Override
@@ -118,116 +183,118 @@ public class CreateAccountActivity extends AppCompatActivity {
         binding = ActivityCreateAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //mapに値を入れる
+        {
+            //outdoor 6
+            item_map.put(outdoor_items.get(0), 0);
+            item_map.put(outdoor_items.get(1), 0);
+            item_map.put(outdoor_items.get(2), 0);
+            item_map.put(outdoor_items.get(3), 0);
+            item_map.put(outdoor_items.get(4), 0);
+            item_map.put(outdoor_items.get(5), 0);
+            //trip 2
+            item_map.put(trip_items.get(0), 0);
+            item_map.put(trip_items.get(1), 0);
+            //reading 6
+            item_map.put(reading_items.get(0), 0);
+            item_map.put(reading_items.get(1), 0);
+            item_map.put(reading_items.get(2), 0);
+            item_map.put(reading_items.get(3), 0);
+            item_map.put(reading_items.get(4), 0);
+            item_map.put(reading_items.get(5), 0);
+            //sns 5
+            item_map.put(sns_items.get(0), 0);
+            item_map.put(sns_items.get(1), 0);
+            item_map.put(sns_items.get(2), 0);
+            item_map.put(sns_items.get(3), 0);
+            item_map.put(sns_items.get(4), 0);
+            //anime 7
+            item_map.put(anime_items.get(0), 0);
+            item_map.put(anime_items.get(1), 0);
+            item_map.put(anime_items.get(2), 0);
+            item_map.put(anime_items.get(3), 0);
+            item_map.put(anime_items.get(4), 0);
+            item_map.put(anime_items.get(5), 0);
+            item_map.put(anime_items.get(6), 0);
+            //game 4
+            item_map.put(game_items.get(0), 0);
+            item_map.put(game_items.get(1), 0);
+            item_map.put(game_items.get(2), 0);
+            item_map.put(game_items.get(3), 0);
+            //movie 7
+            item_map.put(movie_items.get(0), 0);
+            item_map.put(movie_items.get(1), 0);
+            item_map.put(movie_items.get(2), 0);
+            item_map.put(movie_items.get(3), 0);
+            item_map.put(movie_items.get(4), 0);
+            item_map.put(movie_items.get(5), 0);
+            item_map.put(movie_items.get(6), 0);
+            //music 5
+            item_map.put(music_items.get(0), 0);
+            item_map.put(music_items.get(1), 0);
+            item_map.put(music_items.get(2), 0);
+            item_map.put(music_items.get(3), 0);
+            item_map.put(music_items.get(4), 0);
+            //gourmet 4
+            item_map.put(gourmet_items.get(0), 0);
+            item_map.put(gourmet_items.get(1), 0);
+            item_map.put(gourmet_items.get(2), 0);
+            item_map.put(gourmet_items.get(3), 0);
+            //gambling 4
+            item_map.put(gambling_items.get(0), 0);
+            item_map.put(gambling_items.get(1), 0);
+            item_map.put(gambling_items.get(2), 0);
+            item_map.put(gambling_items.get(3), 0);
+        }
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView1);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-        adapterR1 = new recycleAdapter(getApplication(),names[0],name_list);
-        adapterR2 = new recycleAdapter(getApplication(),names[1],name_list);
-        adapterR3 = new recycleAdapter(getApplication(),names[2],name_list);
-        ConcatAdapter concatAdapter = new ConcatAdapter(adapterR1,adapterR2,adapterR3);
-        recyclerView.setAdapter(adapterR1);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        ConcatAdapter concatAdapter = new ConcatAdapter(
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.outdoor.ordinal()],outdoor_items),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.trip.ordinal()],trip_items),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.reading.ordinal()],reading_items),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.sns.ordinal()],sns_items),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.anime.ordinal()],anime_items),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.game.ordinal()],game_items),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.movie.ordinal()],movie_items),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.music.ordinal()],music_items),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.gourmet.ordinal()],gourmet_items),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.gambling.ordinal()],gambling_items)
+                );
+        recyclerView.setAdapter(concatAdapter);
 
-/*
-        ExpandableListView exListView = findViewById(R.id.exListView);
-        ListAdapters adapters = new ListAdapters(CreateAccountActivity.this,name_list,list_all);
-        exListView.setAdapter(adapters);
+        recyclerView_Rear = (RecyclerView) findViewById(R.id.recyclerViewRear);
+        recyclerView_Rear.setHasFixedSize(true);
+        recyclerView_Rear.setLayoutManager(
+                new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false)
+        );
+        recyclerView_Rear.setAdapter(new RecyclerViewAdapter_caaRear(CreateAccountActivity.this,0));
 
-        exListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                    ListAdapters adapters1 = (ListAdapters) parent.getExpandableListAdapter();
-                    String name = (String) adapters1.getGroup(groupPosition);
-                    String name_child = (String) adapters1.getChild(groupPosition, childPosition);
-                    Toast.makeText(getApplicationContext(), name + ":" + name_child, Toast.LENGTH_LONG).show();
-
-                return true;
-            }
-        });*/
-
-        drawable = getResources().getDrawable(R.drawable.caa_button_grayback);
-        drawables_list = new ArrayList<>(){
-            {
-                add(drawable);
-                add(drawable);
-                add(drawable);
-                add(drawable);
-                add(drawable);
-                add(drawable);
-            }
-        };
-        /*
-
-        ListView listView = binding.listGame;
-        ListView listView1 = binding.listSport;
-        ListView listView2 = binding.listReading;
-        ListView listView3 = binding.listTrip;
-        adapter = new ListvewAdapter(this.getApplicationContext(),R.layout.list_items,name_list,drawables_list);
-        listView.setAdapter(adapter);
-        listView1.setAdapter(adapter);
-        listView2.setAdapter(adapter);
-        listView3.setAdapter(adapter);
-
-        button = binding.imageGame;
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(i == 0) {
-                    play(button);
-                    //listView.setAdapter(null);
-
-                    Animation anime = AnimationUtils.loadAnimation(CreateAccountActivity.this,R.anim.caa_button_animation_back);
-
-                    binding.imageSport.startAnimation(anime);
-                    binding.textSport.startAnimation(anime);
-                    ObjectAnimator animation = ObjectAnimator.ofFloat(binding.imageSport, "translationY",(binding.listGame.getTop()-binding.listGame.getBottom()));
-                    animation.setDuration(500);
-                    animation.start();
-
-                    i = 1;
-                }
-                else if(i == 1) {
-                    playback(button);
-                    //listView.setAdapter(adapter);
-
-                    Animation anime = AnimationUtils.loadAnimation(CreateAccountActivity.this,R.anim.caa_button_animation_go);
-
-                    binding.imageSport.startAnimation(anime);
-                    binding.textSport.startAnimation(anime);
-                    ObjectAnimator animation = ObjectAnimator.ofFloat(binding.imageSport, "translationY",0);
-                    animation.setDuration(500);
-                    animation.start();
-                    i = 0;
-                }
-            }
-        });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListView listView1 = (ListView) parent;
-                drawables_list.set(position,getResources().getDrawable(R.drawable.caa_button_colorback));
-                View targetListView = listView1.getChildAt(position);
-                listView1.getAdapter().getView(position,targetListView,listView1);
-            }
-        });
-        */
+        next_go = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.caa_button_animation_go);
+        next_back = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.caa_button_animation_back);
     }
 
-
-    void play(ImageView button){
-        button.setImageDrawable(null);
-        button.setBackgroundResource(R.drawable.caa_button_animation_playback);
-        // Get the background, which has been compiled to an AnimationDrawable object.
-        AnimationDrawable frameAnimation = (AnimationDrawable) button.getBackground();
-        // Start the animation (looped playback by default).
-        frameAnimation.start();
-    }
-    void playback(ImageView button){
-        button.setImageDrawable(null);
-        button.setBackgroundResource(R.drawable.caa_button_animation_play);
-        // Get the background, which has been compiled to an AnimationDrawable object.
-        AnimationDrawable frameAnimation = (AnimationDrawable) button.getBackground();
-        // Start the animation (looped playback by default).
-        frameAnimation.start();
+    public void setText_rear(boolean frag){
+        if(frag && caa_frag) {
+            ObjectAnimator animation = ObjectAnimator.ofFloat(binding.caaNextImage, "translationX", -120f);
+            animation.setDuration(500);
+            animation.start();
+            ObjectAnimator animation1 = ObjectAnimator.ofFloat(binding.caaNextText, "translationX", -120f);
+            animation1.setDuration(500);
+            animation1.start();
+            Log.i("mmmmm","black_black");
+            caa_frag = false;
+        }
+        else if (!frag && !caa_frag){
+            ObjectAnimator animation = ObjectAnimator.ofFloat(binding.caaNextImage, "translationX", 120f);
+            animation.setDuration(500);
+            animation.start();
+            ObjectAnimator animation1 = ObjectAnimator.ofFloat(binding.caaNextText, "translationX", 120f);
+            animation1.setDuration(500);
+            animation1.start();
+            Log.i("mmmmm","gray_gray");
+            caa_frag = true;
+        }
     }
 }
