@@ -25,15 +25,17 @@ public class RecyclerViewAdapter_caa extends RecyclerView.Adapter<RecyclerView.V
     CreateAccountActivity context;
     String title;
     List<String> data;
+    String titleNumber;
     boolean expanded = false;
     final Integer cb_gray = 0;
     final Integer cb_color = 1;
 
 
-    public  RecyclerViewAdapter_caa(CreateAccountActivity con,String tit,List<String> name){
-        this.context = con;
-        this.title = tit;
+    public  RecyclerViewAdapter_caa(CreateAccountActivity context,String title,List<String> name,Integer titleNumber){
+        this.context = context;
+        this.title = title;
         this.data = name;
+        this.titleNumber = String.valueOf(titleNumber);
     }
 
     static class TitleViewHolder extends RecyclerView.ViewHolder{
@@ -95,10 +97,10 @@ public class RecyclerViewAdapter_caa extends RecyclerView.Adapter<RecyclerView.V
             RecyclerViewAdapter_caa.ItemViewHolder itemViewHolder = (RecyclerViewAdapter_caa.ItemViewHolder) holder;
             itemViewHolder.itemText.setText(data.get(Position));
 
-            if (context.item_map.get(data.get(Position)) == cb_color){
+            if (context.item_map.get(titleNumber+Position) == cb_color){
                 itemViewHolder.itemImage.setImageResource(R.drawable.caa_button_colorback);
                 Log.i("mmmmm","0");
-            } else if(context.item_map.get(data.get(Position)) == cb_gray){
+            } else if(context.item_map.get(titleNumber+Position) == cb_gray){
                 itemViewHolder.itemImage.setImageResource(R.drawable.caa_button_grayback);
                 Log.i("mmmmm","1");
             }
@@ -107,19 +109,20 @@ public class RecyclerViewAdapter_caa extends RecyclerView.Adapter<RecyclerView.V
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (context.item_map.get(data.get(Position)) == cb_gray) {
+                            String key = titleNumber + Position;
+                            if (context.item_map.get(key) == cb_gray) {
                                 if(context.i < 10) {
                                     itemViewHolder.itemImage.setImageResource(R.drawable.caa_button_colorback);
-                                    context.item_map.put(data.get(Position), cb_color);
+                                    context.item_map.put(key, cb_color);
                                     ++context.i;
                                 }
-                            } else if(context.item_map.get(data.get(Position)) == cb_color){
+                            } else if(context.item_map.get(key) == cb_color){
                                 itemViewHolder.itemImage.setImageResource(R.drawable.caa_button_grayback);
-                                context.item_map.put(data.get(Position), cb_gray);
+                                context.item_map.put(key, cb_gray);
                                 --context.i;
                             }
                             context.recyclerView_Rear.setAdapter(new RecyclerViewAdapter_caaRear(context,context.i));
-                            Log.i("mmmmm","i："+context.i);
+                            Log.i("mmmmm","key："+key);
                         }
                     });
         }

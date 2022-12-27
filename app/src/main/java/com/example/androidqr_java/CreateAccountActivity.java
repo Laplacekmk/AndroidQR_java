@@ -116,7 +116,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     };
     private List<String> anime_items = new ArrayList<>(){
         {
-            add("SF");
             add("バトル");
             add("ギャグ");
             add("ラブコメ");
@@ -183,8 +182,9 @@ public class CreateAccountActivity extends AppCompatActivity {
         binding = ActivityCreateAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //mapに値を入れる
-        {
+        //mapを0で初期化
+        setMap();
+        /*{
             //outdoor 6
             item_map.put(outdoor_items.get(0), 0);
             item_map.put(outdoor_items.get(1), 0);
@@ -215,7 +215,6 @@ public class CreateAccountActivity extends AppCompatActivity {
             item_map.put(anime_items.get(3), 0);
             item_map.put(anime_items.get(4), 0);
             item_map.put(anime_items.get(5), 0);
-            item_map.put(anime_items.get(6), 0);
             //game 4
             item_map.put(game_items.get(0), 0);
             item_map.put(game_items.get(1), 0);
@@ -245,22 +244,22 @@ public class CreateAccountActivity extends AppCompatActivity {
             item_map.put(gambling_items.get(1), 0);
             item_map.put(gambling_items.get(2), 0);
             item_map.put(gambling_items.get(3), 0);
-        }
+        }*/
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView1);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         ConcatAdapter concatAdapter = new ConcatAdapter(
-                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.outdoor.ordinal()],outdoor_items),
-                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.trip.ordinal()],trip_items),
-                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.reading.ordinal()],reading_items),
-                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.sns.ordinal()],sns_items),
-                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.anime.ordinal()],anime_items),
-                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.game.ordinal()],game_items),
-                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.movie.ordinal()],movie_items),
-                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.music.ordinal()],music_items),
-                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.gourmet.ordinal()],gourmet_items),
-                new RecyclerViewAdapter_caa(CreateAccountActivity.this,titles[numTitles.gambling.ordinal()],gambling_items)
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,  titles[numTitles.outdoor.ordinal()],  outdoor_items,   numTitles.outdoor.ordinal()),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,  titles[numTitles.trip.ordinal()],     trip_items,      numTitles.trip.ordinal()),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,  titles[numTitles.reading.ordinal()],  reading_items,   numTitles.reading.ordinal()),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,  titles[numTitles.sns.ordinal()],      sns_items,       numTitles.sns.ordinal()),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,  titles[numTitles.anime.ordinal()],    anime_items,     numTitles.anime.ordinal()),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,  titles[numTitles.game.ordinal()],     game_items,      numTitles.game.ordinal()),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,  titles[numTitles.movie.ordinal()],    movie_items,     numTitles.movie.ordinal()),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,  titles[numTitles.music.ordinal()],    music_items,     numTitles.music.ordinal()),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,  titles[numTitles.gourmet.ordinal()],  gourmet_items,   numTitles.gourmet.ordinal()),
+                new RecyclerViewAdapter_caa(CreateAccountActivity.this,  titles[numTitles.gambling.ordinal()], gambling_items,  numTitles.gambling.ordinal())
                 );
         recyclerView.setAdapter(concatAdapter);
 
@@ -295,6 +294,91 @@ public class CreateAccountActivity extends AppCompatActivity {
             animation1.start();
             Log.i("mmmmm","gray_gray");
             caa_frag = true;
+        }
+    }
+
+    private void setMap () {
+        //outdoor
+        for (int i = 0; i < outdoor_items.size(); i++) {
+            item_map.put(String.valueOf(numTitles.outdoor.ordinal())+String.valueOf(i), 0);
+        }
+        //trip
+        for (int i = 0; i < trip_items.size(); i++) {
+            item_map.put(String.valueOf(numTitles.trip.ordinal())+String.valueOf(i), 0);
+        }
+        //reading
+        for (int i = 0; i < reading_items.size(); i++) {
+            item_map.put(String.valueOf(numTitles.reading.ordinal())+String.valueOf(i), 0);
+        }
+        //sns
+        for (int i = 0; i < sns_items.size(); i++) {
+            item_map.put(String.valueOf(numTitles.sns.ordinal())+String.valueOf(i), 0);
+        }
+        //anime
+        for (int i = 0; i < anime_items.size(); i++) {
+            item_map.put(String.valueOf(numTitles.anime.ordinal())+String.valueOf(i), 0);
+        }
+        //game
+        for (int i = 0; i < game_items.size(); i++) {
+            item_map.put(String.valueOf(numTitles.game.ordinal())+String.valueOf(i), 0);
+        }
+        //movie
+        for (int i = 0; i < movie_items.size(); i++) {
+            item_map.put(String.valueOf(numTitles.movie.ordinal())+String.valueOf(i), 0);
+        }
+        //music
+        for (int i = 0; i < music_items.size(); i++) {
+            item_map.put(String.valueOf(numTitles.music.ordinal())+String.valueOf(i), 0);
+        }
+        //gourmet
+        for (int i = 0; i < gourmet_items.size(); i++) {
+            item_map.put(String.valueOf(numTitles.gourmet.ordinal())+String.valueOf(i), 0);
+        }
+        //gambling
+        for (int i = 0; i < gambling_items.size(); i++) {
+            item_map.put(String.valueOf(numTitles.gambling.ordinal())+String.valueOf(i), 0);
+        }
+    }
+    private void getMap () {
+        //outdoor
+        for (int i = 0; i < outdoor_items.size(); i++) {
+
+        }
+        //trip
+        for (int i = 0; i < trip_items.size(); i++) {
+
+        }
+        //reading
+        for (int i = 0; i < reading_items.size(); i++) {
+
+        }
+        //sns
+        for (int i = 0; i < sns_items.size(); i++) {
+
+        }
+        //anime
+        for (int i = 0; i < anime_items.size(); i++) {
+
+        }
+        //game
+        for (int i = 0; i < game_items.size(); i++) {
+
+        }
+        //movie
+        for (int i = 0; i < movie_items.size(); i++) {
+
+        }
+        //music
+        for (int i = 0; i < music_items.size(); i++) {
+
+        }
+        //gourmet
+        for (int i = 0; i < gourmet_items.size(); i++) {
+
+        }
+        //gambling
+        for (int i = 0; i < game_items.size(); i++) {
+
         }
     }
 }
