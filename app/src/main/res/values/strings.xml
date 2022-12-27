@@ -16,4 +16,7 @@
     <!--createAccount-->
     <string name="caa_top">好きなものを選んでください</string>
     <string name="caa_next">つぎへ</string>
+    <string name="caa_back">戻る</string>
+    <string name="caa_check">選択した項目</string>
+    <string name="caa_complete">完了</string>
 </resources>

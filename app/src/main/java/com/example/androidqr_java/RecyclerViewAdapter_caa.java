@@ -96,11 +96,12 @@ public class RecyclerViewAdapter_caa extends RecyclerView.Adapter<RecyclerView.V
             int Position = position - 1;
             RecyclerViewAdapter_caa.ItemViewHolder itemViewHolder = (RecyclerViewAdapter_caa.ItemViewHolder) holder;
             itemViewHolder.itemText.setText(data.get(Position));
+            String key = titleNumber+","+Position;
 
-            if (context.item_map.get(titleNumber+Position) == cb_color){
+            if (context.item_map_frag.get(key) == cb_color){
                 itemViewHolder.itemImage.setImageResource(R.drawable.caa_button_colorback);
                 Log.i("mmmmm","0");
-            } else if(context.item_map.get(titleNumber+Position) == cb_gray){
+            } else if(context.item_map_frag.get(key) == cb_gray){
                 itemViewHolder.itemImage.setImageResource(R.drawable.caa_button_grayback);
                 Log.i("mmmmm","1");
             }
@@ -109,20 +110,22 @@ public class RecyclerViewAdapter_caa extends RecyclerView.Adapter<RecyclerView.V
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String key = titleNumber + Position;
-                            if (context.item_map.get(key) == cb_gray) {
-                                if(context.i < 10) {
-                                    itemViewHolder.itemImage.setImageResource(R.drawable.caa_button_colorback);
-                                    context.item_map.put(key, cb_color);
-                                    ++context.i;
+                            if(context.caaFragment_frag) {
+                                String key = titleNumber +","+ Position;
+                                if (context.item_map_frag.get(key) == cb_gray) {
+                                    if (context.i < 10) {
+                                        itemViewHolder.itemImage.setImageResource(R.drawable.caa_button_colorback);
+                                        context.item_map_frag.put(key, cb_color);
+                                        ++context.i;
+                                    }
+                                } else if (context.item_map_frag.get(key) == cb_color) {
+                                    itemViewHolder.itemImage.setImageResource(R.drawable.caa_button_grayback);
+                                    context.item_map_frag.put(key, cb_gray);
+                                    --context.i;
                                 }
-                            } else if(context.item_map.get(key) == cb_color){
-                                itemViewHolder.itemImage.setImageResource(R.drawable.caa_button_grayback);
-                                context.item_map.put(key, cb_gray);
-                                --context.i;
+                                context.recyclerView_Rear.setAdapter(new RecyclerViewAdapter_caaRear(context, context.i));
+                                Log.i("mmmmm", "key：" + key);
                             }
-                            context.recyclerView_Rear.setAdapter(new RecyclerViewAdapter_caaRear(context,context.i));
-                            Log.i("mmmmm","key："+key);
                         }
                     });
         }

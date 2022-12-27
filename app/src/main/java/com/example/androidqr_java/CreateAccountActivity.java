@@ -3,6 +3,8 @@ package com.example.androidqr_java;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ConcatAdapter;
@@ -14,6 +16,7 @@ import com.example.androidqr_java.databinding.ActivityCreateAccountBinding;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -53,8 +56,10 @@ public class CreateAccountActivity extends AppCompatActivity {
     //---------------------------------------
     public int i;
     private boolean caa_frag = false;
+    public boolean caaFragment_frag = true;
 
-    public Map<String,Integer> item_map= new HashMap<String,Integer>();
+    public Map<String,Integer> item_map_frag = new HashMap<String,Integer>();
+    public Map<String,String> item_map_name = new HashMap<String,String>();
     private enum numTitles {
         outdoor,
         trip,
@@ -172,8 +177,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     public RecyclerView recyclerView_Rear;
 
-    private Animation next_go;
-    private Animation next_back;
+    public List<String> selected_itemList = new ArrayList<String>();
+    public List<String> selected_itemNumber = new ArrayList<String>();
     //---------------------------------------
 
     @Override
@@ -183,68 +188,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         //mapを0で初期化
-        setMap();
-        /*{
-            //outdoor 6
-            item_map.put(outdoor_items.get(0), 0);
-            item_map.put(outdoor_items.get(1), 0);
-            item_map.put(outdoor_items.get(2), 0);
-            item_map.put(outdoor_items.get(3), 0);
-            item_map.put(outdoor_items.get(4), 0);
-            item_map.put(outdoor_items.get(5), 0);
-            //trip 2
-            item_map.put(trip_items.get(0), 0);
-            item_map.put(trip_items.get(1), 0);
-            //reading 6
-            item_map.put(reading_items.get(0), 0);
-            item_map.put(reading_items.get(1), 0);
-            item_map.put(reading_items.get(2), 0);
-            item_map.put(reading_items.get(3), 0);
-            item_map.put(reading_items.get(4), 0);
-            item_map.put(reading_items.get(5), 0);
-            //sns 5
-            item_map.put(sns_items.get(0), 0);
-            item_map.put(sns_items.get(1), 0);
-            item_map.put(sns_items.get(2), 0);
-            item_map.put(sns_items.get(3), 0);
-            item_map.put(sns_items.get(4), 0);
-            //anime 7
-            item_map.put(anime_items.get(0), 0);
-            item_map.put(anime_items.get(1), 0);
-            item_map.put(anime_items.get(2), 0);
-            item_map.put(anime_items.get(3), 0);
-            item_map.put(anime_items.get(4), 0);
-            item_map.put(anime_items.get(5), 0);
-            //game 4
-            item_map.put(game_items.get(0), 0);
-            item_map.put(game_items.get(1), 0);
-            item_map.put(game_items.get(2), 0);
-            item_map.put(game_items.get(3), 0);
-            //movie 7
-            item_map.put(movie_items.get(0), 0);
-            item_map.put(movie_items.get(1), 0);
-            item_map.put(movie_items.get(2), 0);
-            item_map.put(movie_items.get(3), 0);
-            item_map.put(movie_items.get(4), 0);
-            item_map.put(movie_items.get(5), 0);
-            item_map.put(movie_items.get(6), 0);
-            //music 5
-            item_map.put(music_items.get(0), 0);
-            item_map.put(music_items.get(1), 0);
-            item_map.put(music_items.get(2), 0);
-            item_map.put(music_items.get(3), 0);
-            item_map.put(music_items.get(4), 0);
-            //gourmet 4
-            item_map.put(gourmet_items.get(0), 0);
-            item_map.put(gourmet_items.get(1), 0);
-            item_map.put(gourmet_items.get(2), 0);
-            item_map.put(gourmet_items.get(3), 0);
-            //gambling 4
-            item_map.put(gambling_items.get(0), 0);
-            item_map.put(gambling_items.get(1), 0);
-            item_map.put(gambling_items.get(2), 0);
-            item_map.put(gambling_items.get(3), 0);
-        }*/
+        Map_setFrag();
+        Map_setName();
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView1);
         recyclerView.setHasFixedSize(true);
@@ -270,8 +215,19 @@ public class CreateAccountActivity extends AppCompatActivity {
         );
         recyclerView_Rear.setAdapter(new RecyclerViewAdapter_caaRear(CreateAccountActivity.this,0));
 
-        next_go = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.caa_button_animation_go);
-        next_back = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.caa_button_animation_back);
+        binding.caaNextImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                caaFragment_frag = false;
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                fragmentTransaction.addToBackStack(null);
+
+                fragmentTransaction.replace(R.id.caa_main,new CreateAccountCheckFragment());
+                fragmentTransaction.commit();
+            }
+        });
     }
 
     public void setText_rear(boolean frag){
@@ -282,7 +238,10 @@ public class CreateAccountActivity extends AppCompatActivity {
             ObjectAnimator animation1 = ObjectAnimator.ofFloat(binding.caaNextText, "translationX", -120f);
             animation1.setDuration(500);
             animation1.start();
-            Log.i("mmmmm","black_black");
+            selected_itemList = selectedItemList();
+            selected_itemNumber = selectedItemNumber();
+            Log.i("mmmmm",selected_itemList + "");
+            Log.i("mmmmm",selected_itemNumber + "");
             caa_frag = false;
         }
         else if (!frag && !caa_frag){
@@ -292,93 +251,246 @@ public class CreateAccountActivity extends AppCompatActivity {
             ObjectAnimator animation1 = ObjectAnimator.ofFloat(binding.caaNextText, "translationX", 120f);
             animation1.setDuration(500);
             animation1.start();
+            selected_itemList = null;
+            selected_itemNumber = null;
             Log.i("mmmmm","gray_gray");
             caa_frag = true;
         }
     }
 
-    private void setMap () {
+    List<String> selectedItemList(){
+        List<String> list = new ArrayList<String>();
+        String title;
+        //outdoor
+        title = String.valueOf(numTitles.outdoor.ordinal())+",";
+        for (int i = 0; i < outdoor_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(item_map_name.get(title + i));
+            }
+        }
+        //trip
+        title = String.valueOf(numTitles.trip.ordinal())+",";
+        for (int i = 0; i < trip_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(item_map_name.get(title + i));
+            }
+        }
+        //reading
+        title = String.valueOf(numTitles.reading.ordinal()+",");
+        for (int i = 0; i < reading_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(item_map_name.get(title + i));
+            }
+        }
+        //sns
+        title = String.valueOf(numTitles.sns.ordinal())+",";
+        for (int i = 0; i < sns_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(item_map_name.get(title + i));
+            }
+        }
+        //anime
+        title = String.valueOf(numTitles.anime.ordinal())+",";
+        for (int i = 0; i < anime_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(item_map_name.get(title + i));
+            }
+        }
+        //game
+        title = String.valueOf(numTitles.game.ordinal())+",";
+        for (int i = 0; i < game_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(item_map_name.get(title + i));
+            }
+        }
+        //movie
+        title = String.valueOf(numTitles.movie.ordinal())+",";
+        for (int i = 0; i < movie_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(item_map_name.get(title + i));
+            }
+        }
+        //music
+        title = String.valueOf(numTitles.music.ordinal())+",";
+        for (int i = 0; i < music_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(item_map_name.get(title + i));
+            }
+        }
+        //gourmet
+        title = String.valueOf(numTitles.gourmet.ordinal())+",";
+        for (int i = 0; i < gourmet_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(item_map_name.get(title + i));
+            }
+        }
+        //gambling
+        title = String.valueOf(numTitles.gambling.ordinal())+",";
+        for (int i = 0; i < game_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(item_map_name.get(title + i));
+            }
+        }
+        return list;
+    }
+    List<String> selectedItemNumber(){
+        List<String> list = new ArrayList<String>();
+        String title;
+        //outdoor
+        title = String.valueOf(numTitles.outdoor.ordinal())+",";
+        for (int i = 0; i < outdoor_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(title + i);
+            }
+        }
+        //trip
+        title = String.valueOf(numTitles.trip.ordinal())+",";
+        for (int i = 0; i < trip_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(title + i);
+            }
+        }
+        //reading
+        title = String.valueOf(numTitles.reading.ordinal())+",";
+        for (int i = 0; i < reading_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(title + i);
+            }
+        }
+        //sns
+        title = String.valueOf(numTitles.sns.ordinal())+",";
+        for (int i = 0; i < sns_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(title + i);
+            }
+        }
+        //anime
+        title = String.valueOf(numTitles.anime.ordinal())+",";
+        for (int i = 0; i < anime_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(title + i);
+            }
+        }
+        //game
+        title = String.valueOf(numTitles.game.ordinal())+",";
+        for (int i = 0; i < game_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(title + i);
+            }
+        }
+        //movie
+        title = String.valueOf(numTitles.movie.ordinal())+",";
+        for (int i = 0; i < movie_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(title + i);
+            }
+        }
+        //music
+        title = String.valueOf(numTitles.music.ordinal())+",";
+        for (int i = 0; i < music_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(title + i);
+            }
+        }
+        //gourmet
+        title = String.valueOf(numTitles.gourmet.ordinal())+",";
+        for (int i = 0; i < gourmet_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(title + i);
+            }
+        }
+        //gambling
+        title = String.valueOf(numTitles.gambling.ordinal())+",";
+        for (int i = 0; i < game_items.size(); i++) {
+            if(item_map_frag.get(title + i) == 1) {
+                list.add(title + i);
+            }
+        }
+        return list;
+    }
+
+    private void Map_setFrag () {
         //outdoor
         for (int i = 0; i < outdoor_items.size(); i++) {
-            item_map.put(String.valueOf(numTitles.outdoor.ordinal())+String.valueOf(i), 0);
+            item_map_frag.put(numTitles.outdoor.ordinal()+","+i,    0);
         }
         //trip
         for (int i = 0; i < trip_items.size(); i++) {
-            item_map.put(String.valueOf(numTitles.trip.ordinal())+String.valueOf(i), 0);
+            item_map_frag.put(numTitles.trip.ordinal()+","+i,       0);
         }
         //reading
         for (int i = 0; i < reading_items.size(); i++) {
-            item_map.put(String.valueOf(numTitles.reading.ordinal())+String.valueOf(i), 0);
+            item_map_frag.put(numTitles.reading.ordinal()+","+i,    0);
         }
         //sns
         for (int i = 0; i < sns_items.size(); i++) {
-            item_map.put(String.valueOf(numTitles.sns.ordinal())+String.valueOf(i), 0);
+            item_map_frag.put(numTitles.sns.ordinal()+","+i,        0);
         }
         //anime
         for (int i = 0; i < anime_items.size(); i++) {
-            item_map.put(String.valueOf(numTitles.anime.ordinal())+String.valueOf(i), 0);
+            item_map_frag.put(numTitles.anime.ordinal()+","+i,      0);
         }
         //game
         for (int i = 0; i < game_items.size(); i++) {
-            item_map.put(String.valueOf(numTitles.game.ordinal())+String.valueOf(i), 0);
+            item_map_frag.put(numTitles.game.ordinal()+","+i,       0);
         }
         //movie
         for (int i = 0; i < movie_items.size(); i++) {
-            item_map.put(String.valueOf(numTitles.movie.ordinal())+String.valueOf(i), 0);
+            item_map_frag.put(numTitles.movie.ordinal()+","+i,      0);
         }
         //music
         for (int i = 0; i < music_items.size(); i++) {
-            item_map.put(String.valueOf(numTitles.music.ordinal())+String.valueOf(i), 0);
+            item_map_frag.put(numTitles.music.ordinal()+","+i,      0);
         }
         //gourmet
         for (int i = 0; i < gourmet_items.size(); i++) {
-            item_map.put(String.valueOf(numTitles.gourmet.ordinal())+String.valueOf(i), 0);
+            item_map_frag.put(numTitles.gourmet.ordinal()+","+i,    0);
         }
         //gambling
         for (int i = 0; i < gambling_items.size(); i++) {
-            item_map.put(String.valueOf(numTitles.gambling.ordinal())+String.valueOf(i), 0);
+            item_map_frag.put(numTitles.gambling.ordinal()+","+i,   0);
         }
     }
-    private void getMap () {
+    private void Map_setName () {
         //outdoor
         for (int i = 0; i < outdoor_items.size(); i++) {
-
+            item_map_name.put(numTitles.outdoor.ordinal()+","+i,    outdoor_items.get(i));
         }
         //trip
         for (int i = 0; i < trip_items.size(); i++) {
-
+            item_map_name.put(numTitles.trip.ordinal()+","+i,       trip_items.get(i));
         }
         //reading
         for (int i = 0; i < reading_items.size(); i++) {
-
+            item_map_name.put(numTitles.reading.ordinal()+","+i,    reading_items.get(i));
         }
         //sns
         for (int i = 0; i < sns_items.size(); i++) {
-
+            item_map_name.put(numTitles.sns.ordinal()+","+i,        sns_items.get(i));
         }
         //anime
         for (int i = 0; i < anime_items.size(); i++) {
-
+            item_map_name.put(numTitles.anime.ordinal()+","+i,      anime_items.get(i));
         }
         //game
         for (int i = 0; i < game_items.size(); i++) {
-
+            item_map_name.put(numTitles.game.ordinal()+","+i,       game_items.get(i));
         }
         //movie
         for (int i = 0; i < movie_items.size(); i++) {
-
+            item_map_name.put(numTitles.movie.ordinal()+","+i,      movie_items.get(i));
         }
         //music
         for (int i = 0; i < music_items.size(); i++) {
-
+            item_map_name.put(numTitles.music.ordinal()+","+i,      music_items.get(i));
         }
         //gourmet
         for (int i = 0; i < gourmet_items.size(); i++) {
-
+            item_map_name.put(numTitles.gourmet.ordinal()+","+i,    gourmet_items.get(i));
         }
         //gambling
-        for (int i = 0; i < game_items.size(); i++) {
-
+        for (int i = 0; i < gambling_items.size(); i++) {
+            item_map_name.put(numTitles.gambling.ordinal()+","+i,   gambling_items.get(i));
         }
     }
 }

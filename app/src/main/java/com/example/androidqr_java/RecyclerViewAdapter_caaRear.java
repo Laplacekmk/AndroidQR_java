@@ -45,7 +45,6 @@ public class RecyclerViewAdapter_caaRear extends RecyclerView.Adapter<RecyclerVi
         return new RecyclerViewHolder_caaRear(view);
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder_caaRear holder, int position) {
         if (rearCount > position){
