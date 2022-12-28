@@ -66,7 +66,7 @@ public class RecyclerViewAdapter_caaCheck extends RecyclerView.Adapter<RecyclerV
     public void onBindViewHolder(@NonNull RecyclerViewHolder_caaCheck holder, int position) {
         holder.checkText.setText(context.selected_itemList.get(position));
         holder.checkTitle.setText(titles[itemNumber.get(position)]);
-        if(position + 1 == itemCount) holder.checkImage.setImageResource(0);
+        if(position  == itemCount) holder.checkImage.setImageResource(0);
         else holder.checkImage.setImageResource(R.drawable.caa_line);
         Log.i("mmmmm",context.selected_itemList.get(position));
     }

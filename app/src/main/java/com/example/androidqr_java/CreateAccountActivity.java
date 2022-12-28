@@ -177,6 +177,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     public RecyclerView recyclerView_Rear;
 
+    public String Nickname;
     public List<String> selected_itemList = new ArrayList<String>();
     public List<String> selected_itemNumber = new ArrayList<String>();
     //---------------------------------------
@@ -228,6 +229,15 @@ public class CreateAccountActivity extends AppCompatActivity {
                 fragmentTransaction.commit();
             }
         });
+
+        caaFragment_frag = false;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.addToBackStack(null);
+
+        fragmentTransaction.replace(R.id.caa_main,new CreateAcountNicknameFragment());
+        fragmentTransaction.commit();
     }
 
     public void setText_rear(boolean frag){

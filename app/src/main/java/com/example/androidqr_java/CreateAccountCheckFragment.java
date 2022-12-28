@@ -35,9 +35,13 @@ public class CreateAccountCheckFragment extends Fragment {
         ImageView backImg = view.findViewById(R.id.caa_back_image);
 
         // ボタンをクリックした時の処理
+        //ホームへ
         completeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                fragmentManager.popBackStack();
+                activity.finish();
                 Intent intent = new Intent(activity, MainActivity.class);
                 startActivity(intent);
             }
@@ -45,10 +49,14 @@ public class CreateAccountCheckFragment extends Fragment {
         completeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                fragmentManager.popBackStack();
+                activity.finish();
                 Intent intent = new Intent(activity, MainActivity.class);
                 startActivity(intent);
             }
         });
+        //戻り
         backImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

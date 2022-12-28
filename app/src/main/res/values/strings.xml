@@ -14,8 +14,12 @@
     <string name="login_line">LINEでログイン</string>
     <string name="chanelID">1657747561</string>
     <!--createAccount-->
+    <string name="nickname_edit">ニックネームを入力してください</string>
+    <string name="nickname_kome">※10文字以内</string>
+    <string name="nickname_next">決定してつぎへ</string>
+    <string name="nickname">nickname</string>
     <string name="caa_top">好きなものを選んでください</string>
-    <string name="caa_next">つぎへ</string>
+    <string name="caa_next">確認</string>
     <string name="caa_back">戻る</string>
     <string name="caa_check">選択した項目</string>
     <string name="caa_complete">完了</string>
