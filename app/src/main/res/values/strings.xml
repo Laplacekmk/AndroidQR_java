@@ -4,20 +4,45 @@
     <string name="hint">add text</string>
     <string name="camera">camera</string>
     <string name="createAccount">アカウント作成</string>
+    <!--database-->
+    <string name="add">add</string>
+    <string name="login">login</string>
+    <string name="logout">logout</string>
+    <string name="update">update</string>
+    <string name="access">access</string>
+    <string name="confirm">confirm</string>
+    <string name="getOthersInfo">getOthersInfo</string>
+    <string name="existence">existence</string>
     <!--google-->
     <string name="login_google">Googleでログイン</string>
     <string name="google">google</string>
     <string name="server_client_id">672366818124-qvd8n08dll3m57f9nq0p2koc2rcd27i7.apps.googleusercontent.com</string>
-    <string name="GAS_URL">https://script.googleapis.com/v1/scripts/AKfycbzTTqJ-Tin2b9laNCJNbVVN4r7CLNt4XOPhL52daJ6BIDIx3gPppxi9FAQzu3PXJald:run</string>
+    <string name="GAS_URL">https://script.google.com/macros/s/AKfycbwCnzOMvQ4Tx6fojVg4cjTU0kOxknjd1cZwG9JofrevJDKbjtbD0Pq82W4rFMTasK6x/exec</string>
     <string name="MediaType">application/json; charset=utf-8</string>
+    <string name="pre_googleSignInCheck">pre_googleSignInAccount</string>
     <!--line-->
     <string name="login_line">LINEでログイン</string>
+    <string name="line">LINE</string>
     <string name="chanelID">1657747561</string>
+    <string name="pre_lineSignInCheck">pre_LineSignInAccount</string>
     <!--createAccount-->
-    <!--game-->
-    <string-array name="list_game">
-        <item>PlayStation</item>
-        <item>Switch</item>
-        <item>パソコン</item>
-    </string-array>
+    <string name="nickname_edit">ニックネームを入力してください</string>
+    <string name="nickname_kome">※10文字以内</string>
+    <string name="nickname_next">決定してつぎへ</string>
+    <string name="nickname">nickname</string>
+    <string name="caa_top">好きなものを選んでください</string>
+    <string name="caa_next">確認</string>
+    <string name="caa_back">戻る</string>
+    <string name="caa_check">選択した項目</string>
+    <string name="caa_complete">完了</string>
+    <string name="GorL">ログイン時に使用するアカウント</string>
+    <string name="or">or</string>
+    <!--アカウント情報のSharedPreferences-->
+    <string name="sp_account">SharedPreferencesAccount</string>
+    <string name="sp_ac_id">SharedPreferencesAccountId</string>
+    <string name="sp_ac_nickname">SharedPreferencesAccountNickname</string>
+    <string name="sp_ac_info_name">SharedPreferencesAccountInformationName</string>
+    <string name="sp_ac_info_number">SharedPreferencesAccountInformationNumber</string>
+    <string name="sp_ac_gmail">SharedPreferencesAccountGmail</string>
+    <string name="sp_ac_lineID">SharedPreferencesAccountLineID</string>
 </resources>

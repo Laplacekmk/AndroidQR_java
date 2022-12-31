@@ -696,7 +696,7 @@ inline uint64_t Time(const ULID& ulid) {
 };  // namespace ulid
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_androidqr_1java_SignInActivity_getULID(
+Java_com_example_androidqr_1java_CreateAccountCheckFragment_getULID(
         JNIEnv* env, jobject thiz
 ){
 	using std::cout;

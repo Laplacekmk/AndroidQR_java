@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.wifi.hotspot2.pps.Credential;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -95,17 +96,21 @@ public class SecondActivity extends AppCompatActivity {
         //dbから取得する情報を入力
         addBtn.setOnClickListener(nvoAdd);
         searchBtn.setOnClickListener(nvoSearch);
-        /*access token
-        {
-            try {
-                AccessToken token = getScriptService();
-                Log.i("mmmmmmmmmm","access ok");
-            }catch (IOException e){
-                Log.i("mmmmmmmmmm",String.valueOf(e));
-            }
-
-        }*/
     }
+
+
+    private View.OnClickListener nvoSo = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            SharedPreferences sharedPref = SecondActivity.this.getSharedPreferences(getString(R.string.sp_account),getApplication().MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.remove(getString(R.string.sp_ac_lineID));
+            editor.remove(getString(R.string.sp_ac_gmail));
+            editor.commit();
+            finish();
+            startActivity(new Intent(SecondActivity.this, SignInActivity.class));
+        }
+    };
 
     void httpRequest(String url,String json) throws IOException{
 
@@ -170,19 +175,6 @@ public class SecondActivity extends AppCompatActivity {
             });
     }
 
-    private View.OnClickListener nvoSo = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    finish();
-                    startActivity(new Intent(SecondActivity.this, SignInActivity.class));
-                }
-            });
-        }
-    };
-
     private  View.OnClickListener nvoAdd = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -204,33 +196,6 @@ public class SecondActivity extends AppCompatActivity {
             }
         }
     };
-    /*Apps Scrips OAuth 認証（残骸）
-
-    private static HttpRequestInitializer setHttpTimeout(final HttpRequestInitializer requestInitializer) {
-        return new HttpRequestInitializer() {
-            @Override
-            public void initialize(HttpRequest httpRequest) throws IOException {
-                requestInitializer.initialize(httpRequest);
-                httpRequest.setConnectTimeout(3 * 60000);  // 3 minutes connect timeout
-                httpRequest.setReadTimeout(3 * 60000);  // 3 minutes read timeout
-            }
-        };
-    }
-
-    public AccessToken getScriptService() throws IOException {
-        Log.i("mmmmmmmmmm","access no00");
-        File credential_file = new File("C:\\A_school\\team\\AndroidQR_java\\app\\libs\\credentials.json");
-
-        FileInputStream inputStream = openFileInput("libs\\credentials.json");
-        Log.i("mmmmmmmmmm", "no12");/*
-        GoogleCredentials credential = GoogleCredentials.fromStream(inputStream);
-        Log.i("mmmmmmmmmm","access no0");
-        credential.refreshIfExpired();
-        Log.i("mmmmmmmmmm","access no1");
-        AccessToken token = credential.getAccessToken();
-        Log.i("mmmmmmmmmm",String.valueOf(token));
-        return null;
-    }*/
 
     private  View.OnClickListener nvoSearch = new View.OnClickListener() {
         @Override
