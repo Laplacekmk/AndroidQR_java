@@ -11,11 +11,12 @@
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        app:srcCompat="@drawable/caa_line"/>
+        app:srcCompat="@drawable/caa_line_white"/>
     <TextView
         android:id="@+id/check_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/shallowGray"
         android:textSize="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -25,7 +26,7 @@
     <TextView
         android:id="@+id/check_item_text"
         android:textSize="15dp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

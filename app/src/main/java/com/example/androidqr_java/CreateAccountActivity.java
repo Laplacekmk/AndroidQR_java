@@ -12,11 +12,18 @@ import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
 import com.example.androidqr_java.databinding.ActivityCreateAccountBinding;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.linecorp.linesdk.auth.LineLoginApi;
+import com.linecorp.linesdk.auth.LineLoginResult;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -52,6 +59,9 @@ import io.opencensus.resource.Resource;
 public class CreateAccountActivity extends AppCompatActivity {
 
     private ActivityCreateAccountBinding binding;
+
+    final int GS_IN = 1000;
+    final int LS_IN = 1001;
 
     //---------------------------------------
     public int i;
@@ -229,7 +239,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 fragmentTransaction.commit();
             }
         });
-
+/*
         caaFragment_frag = false;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -237,7 +247,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
 
         fragmentTransaction.replace(R.id.caa_main,new CreateAcountNicknameFragment());
-        fragmentTransaction.commit();
+        fragmentTransaction.commit();*/
     }
 
     public void setText_rear(boolean frag){

@@ -80,10 +80,10 @@ public class RecyclerViewAdapter_caa extends RecyclerView.Adapter<RecyclerView.V
             titleViewHolder.titleText.setText(title);
             if (expanded) {
                 titleViewHolder.titleImage
-                        .setImageDrawable(ContextCompat.getDrawable(context, R.drawable.caa_title_arrowbottom));
+                        .setImageDrawable(ContextCompat.getDrawable(context, R.drawable.caa_title_listbottom));
             } else {
                 titleViewHolder.titleImage
-                        .setImageDrawable(ContextCompat.getDrawable(context, R.drawable.caa_title_arrowtop));
+                        .setImageDrawable(ContextCompat.getDrawable(context, R.drawable.caa_title_listtop));
             }
             titleViewHolder.titleImage.
                     setOnClickListener(new View.OnClickListener() {

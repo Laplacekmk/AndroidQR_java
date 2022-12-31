@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_check_frag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/black">
     <LinearLayout
         android:id="@+id/caa_linear_top"
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
         android:id="@+id/caa_check_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/shallowGray"
         android:text="@string/caa_check"
         app:layout_constraintTop_toBottomOf="@id/caa_linear_top"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -36,7 +37,7 @@
         android:layout_marginBottom="70dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/caa_stroke">
+        android:background="@drawable/caa_stroke_white">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewCheck_caa"
             android:layout_centerHorizontal="true"
@@ -47,7 +48,7 @@
         android:id="@+id/complete_image"
         android:layout_width="23dp"
         android:layout_height="23dp"
-        app:srcCompat="@drawable/caa_button_completeb"
+        app:srcCompat="@drawable/caa_button_completed_black"
         app:layout_constraintTop_toBottomOf="@id/recyclerViewCheck_caa_L"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -58,7 +59,7 @@
         android:layout_height="wrap_content"
         android:text="@string/caa_complete"
         android:textSize="13dp"
-        android:textColor="@color/black"
+        android:textColor="@color/shallowGray"
         app:layout_constraintTop_toTopOf="@id/complete_image"
         app:layout_constraintBottom_toBottomOf="@id/complete_image"
         app:layout_constraintRight_toLeftOf="@id/complete_image"
@@ -67,7 +68,7 @@
         android:id="@+id/caa_back_image"
         android:layout_width="26dp"
         android:layout_height="26dp"
-        app:srcCompat="@drawable/caa_button_cancel"
+        app:srcCompat="@drawable/caa_button_cancel_black"
         app:layout_constraintTop_toBottomOf="@id/recyclerViewCheck_caa_L"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
