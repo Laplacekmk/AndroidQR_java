@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/gradient_ma_2"
     tools:context=".SignInActivity">
 
     <ImageView
@@ -27,7 +27,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="0dp"
-        app:srcCompat="@drawable/login_button_back"/>
+        app:srcCompat="@drawable/login_button_back_google"/>
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="@string/login_google"
         android:textSize="15dp"
-        android:textColor="@color/deepGray"
+        android:textColor="@color/shallowGray"
         app:layout_constraintTop_toTopOf="@id/google_login_"
         app:layout_constraintBottom_toBottomOf="@id/google_login_"
         app:layout_constraintRight_toRightOf="@id/line_login_"
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:text="@string/login_line"
         android:textSize="15dp"
-        android:textColor="@color/deepGray"
+        android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="@id/line_login_"
         app:layout_constraintBottom_toBottomOf="@id/line_login_"
         app:layout_constraintRight_toRightOf="@id/line_login_"

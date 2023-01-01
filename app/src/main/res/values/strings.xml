@@ -2,7 +2,6 @@
     <string name="app_name">AndroidQR_java</string>
     <string name="createQR">create QRcode</string>
     <string name="hint">add text</string>
-    <string name="camera">camera</string>
     <string name="createAccount">アカウント作成</string>
     <!--database-->
     <string name="add">add</string>
@@ -37,6 +36,10 @@
     <string name="caa_complete">完了</string>
     <string name="GorL">ログイン時に使用するアカウント</string>
     <string name="or">or</string>
+    <!--MainActivity-->
+    <string name="camera">camera</string>
+    <string name="qrcode">QRcode</string>
+    <string name="scan">scan</string>
     <!--アカウント情報のSharedPreferences-->
     <string name="sp_account">SharedPreferencesAccount</string>
     <string name="sp_ac_id">SharedPreferencesAccountId</string>
