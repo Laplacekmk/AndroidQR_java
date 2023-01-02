@@ -100,11 +100,11 @@ public class MainActivity extends AppCompatActivity {
         batu_dynamicAnimation = new FlingAnimation(binding.maTopLayout, DynamicAnimation.TRANSLATION_X);
 
         //QR code生成
-        final ImageView buttonQR = binding.maQrcode;
+        final ImageView buttonQR = binding.maQrcodeStroke;
         buttonQR.setOnClickListener(nvoQR);
 
         //cameraへ移動
-        final ImageView buttonCamera = binding.maScan;
+        final ImageView buttonCamera = binding.maScanStroke;
         buttonCamera.setOnClickListener(nvoCamera);
 
         //secondActivityへ遷移

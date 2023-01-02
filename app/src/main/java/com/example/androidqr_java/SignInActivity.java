@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,6 +46,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.androidqr_java.databinding.ActivitySignInBinding;
 import com.linecorp.linesdk.Constants;
 import com.linecorp.linesdk.LoginDelegate;
@@ -75,11 +78,11 @@ public class SignInActivity extends AppCompatActivity {
     private LoginDelegate loginDelegate = LoginDelegate.Factory.create();
     final int LS_IN = 1001;
     String lineID;
-
+    /*
     ScaleAnimation btnEffect = new ScaleAnimation(
             1.0f, 0.9f, 1.0f, 0.9f,
             Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-
+*/
     String GAS_URL;
 
     private DatabaseExistence dE;
@@ -91,6 +94,12 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        ConstraintLayout constraintLayout = binding.siaConstraintLayout;
+        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
 
         //url
         GAS_URL = getString(R.string.GAS_URL);
@@ -132,6 +141,7 @@ public class SignInActivity extends AppCompatActivity {
     private  View.OnClickListener nvoGs = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            /*
             btnEffect.setDuration(400);
             btnEffect.setAnimationListener(new Animation.AnimationListener() {
                 @Override
@@ -152,6 +162,9 @@ public class SignInActivity extends AppCompatActivity {
                 }
             });
             buttonGoogle.startAnimation(btnEffect);
+            */
+            Intent signInIntent = gsc.getSignInIntent();
+            startActivityForResult(signInIntent, GS_IN);
         }
     };
 
@@ -159,6 +172,7 @@ public class SignInActivity extends AppCompatActivity {
     private  View.OnClickListener nvoLs = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            /*
             btnEffect.setDuration(400);
             btnEffect.setAnimationListener(new Animation.AnimationListener() {
                 @Override
@@ -189,6 +203,19 @@ public class SignInActivity extends AppCompatActivity {
                 }
             });
             buttonLINE.startAnimation(btnEffect);
+            */
+            try {
+                // App-to-app login
+                Intent signInIntent = LineLoginApi.getLoginIntent(
+                        view.getContext(),
+                        getString(R.string.chanelID),
+                        new LineAuthenticationParams.Builder()
+                                .scopes(Arrays.asList(Scope.PROFILE))
+                                .build());
+                startActivityForResult(signInIntent, LS_IN);
+            } catch (Exception e) {
+                Log.e("mmmmmmmmmmm", e.toString());
+            }
         }
     };
 

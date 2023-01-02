@@ -104,6 +104,7 @@ public class SecondActivity extends AppCompatActivity {
         public void onClick(View view) {
             SharedPreferences sharedPref = SecondActivity.this.getSharedPreferences(getString(R.string.sp_account),getApplication().MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
+            editor.remove(getString(R.string.sp_ac_id));
             editor.remove(getString(R.string.sp_ac_lineID));
             editor.remove(getString(R.string.sp_ac_gmail));
             editor.commit();
