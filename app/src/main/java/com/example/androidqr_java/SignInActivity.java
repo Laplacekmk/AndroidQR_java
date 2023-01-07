@@ -34,6 +34,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.zxing.BarcodeFormat;
 
@@ -66,6 +67,8 @@ public class SignInActivity extends AppCompatActivity {
 
     private ActivitySignInBinding binding;
 
+    AnimationDrawable animationDrawable;
+
     //google sign in
     ImageView buttonGoogle;
     GoogleSignInOptions gso;
@@ -85,7 +88,7 @@ public class SignInActivity extends AppCompatActivity {
 */
     String GAS_URL;
 
-    private DatabaseExistence dE;
+    private DatabaseGetMyInfo dG;
 
     boolean sia_frag = false;
 
@@ -96,7 +99,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         ConstraintLayout constraintLayout = binding.siaConstraintLayout;
-        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
+        animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
         animationDrawable.setEnterFadeDuration(2000);
         animationDrawable.setExitFadeDuration(4000);
         animationDrawable.start();
@@ -121,7 +124,8 @@ public class SignInActivity extends AppCompatActivity {
         String account_line = sharedPref.getString(getString(R.string.sp_ac_lineID), null);
         //database確認
         if(account_google != null || account_line != null) {
-            navigateToSecondActivity(1);
+            Log.i("mmmmm",account_google + account_line);
+            navigateToSecondActivity(3);
         }
         //ボタンのレイアウトと配置
         buttonGoogle = binding.googleLogin;
@@ -234,7 +238,8 @@ public class SignInActivity extends AppCompatActivity {
                 if(account != null){
                     gmail = account.getEmail();
 
-                    dE = new DatabaseExistence(GAS_URL,null,gmail,null);
+                    dG = new DatabaseGetMyInfo(GAS_URL,null,gmail,null);
+                    dG.SetMyInfo();
                     //判定が出るまでループ--------------------------------
                     Handler mainHandler = new Handler(Looper.getMainLooper());
                     ProgressBar progressBar = binding.progressBar;
@@ -243,8 +248,8 @@ public class SignInActivity extends AppCompatActivity {
                     Runnable r = new Runnable() {
                         @Override
                         public void run() {
-                            if(dE.getFrag() != 2){
-                                navigateToSecondActivity(dE.getFrag());
+                            if(dG.getFrag() != 2){
+                                navigateToSecondActivity(dG.getFrag());
                             }
                             else {
                                 mainHandler.postDelayed(this, 100);
@@ -260,16 +265,15 @@ public class SignInActivity extends AppCompatActivity {
                 return;
             }
         }
-
         //lineからの戻り
-        if (requestCode == LS_IN) {
+        else if (requestCode == LS_IN) {
             LineLoginResult result = LineLoginApi.getLoginResultFromIntent(data);
             switch (result.getResponseCode()) {
                 case SUCCESS:
                     // Login successful
                     lineID = result.getLineProfile().getUserId();
                     //database
-                    dE = new DatabaseExistence(GAS_URL,null,null,lineID);
+                    dG= new DatabaseGetMyInfo(GAS_URL,null,null,lineID);
                     //判定が出るまでループ--------------------------------
                     Handler mainHandler = new Handler(Looper.getMainLooper());
                     ProgressBar progressBar = binding.progressBar;
@@ -278,8 +282,8 @@ public class SignInActivity extends AppCompatActivity {
                     Runnable r = new Runnable() {
                         @Override
                         public void run() {
-                            if(dE.getFrag() != 2){
-                                navigateToSecondActivity(dE.getFrag());
+                            if(dG.getFrag() != 2){
+                                navigateToSecondActivity(dG.getFrag());
                             }
                             else {
                                 mainHandler.postDelayed(this, 100);
@@ -292,15 +296,17 @@ public class SignInActivity extends AppCompatActivity {
                 case CANCEL:
                     // Login canceled by user
                     Log.i("mmmmmmmmm", "LINE Login Canceled by user.");
+                    Toast.makeText(getApplicationContext(), "LINE Login Canceled", Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     // Login canceled due to other error
                     Log.i("mmmmmmmm", "Login FAILED!");
                     Log.i("mmmmmmmmm", result.getErrorData().toString());
+                    Toast.makeText(getApplicationContext(), "LINE Login Canceled", Toast.LENGTH_SHORT).show();
             }
             return;
         }
-        else if (requestCode != LS_IN){
+        else{
             Log.i("mmmmmmmmm", "Unsupported Request");
             return;
         }
@@ -314,12 +320,27 @@ public class SignInActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString(getString(R.string.sp_ac_lineID), lineID);
             editor.putString(getString(R.string.sp_ac_gmail), gmail);
+            editor.putString(getString(R.string.sp_ac_id),dG.getId());
+            editor.putString(getString(R.string.sp_ac_nickname),dG.getNickname());
+            editor.putString(getString(R.string.sp_ac_info_number),dG.getInfo());
             editor.apply();
             finish();
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             startActivity(intent);
         }
+        else if(frag == 3){
+            finish();
+            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
         else{
+            gsc.signOut()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            // ...
+                        }
+                    });
             binding.asiLoad.setImageResource(0);
             binding.progressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(getApplicationContext(), "Undefined your account", Toast.LENGTH_SHORT).show();
@@ -335,4 +356,18 @@ public class SignInActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+
+        animationDrawable.stop();
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+
+        animationDrawable.start();
+    }
 }

@@ -717,3 +717,27 @@ Java_com_example_androidqr_1java_CreateAccountCheckFragment_getULID(
 
     return env->NewStringUTF(str.c_str());
 }
+
+
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_example_androidqr_1java_MainActivity_getRandom(
+		JNIEnv* env, jobject thiz
+){
+	using std::cout;
+	using std::endl;
+	using std::chrono::duration_cast;
+	using std::chrono::milliseconds;
+	using std::chrono::seconds;
+	using std::chrono::system_clock;
+
+	srand((unsigned int)time(NULL));
+	//ミリ秒単位の経過時間
+	long long now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+
+	//第二引数：0~255範囲の乱数を生成する関数
+	ulid::ULID ulid = ulid::Create(now, []() { return rand() % 256 - 1; });
+	//ulid::ULID ulid = ulid::Create(1484581420, []() { return 4; });
+	std::string str = ulid::Marshal(ulid);
+
+	return env->NewStringUTF(str.c_str());
+}

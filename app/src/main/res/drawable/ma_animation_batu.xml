@@ -9,11 +9,11 @@
     <item android:drawable="@drawable/ma_animation_batu12"
         android:duration="40"/>
     <item android:drawable="@drawable/ma_animation_batu13"
-        android:duration="40"/>
+        android:duration="40"/><!--
     <item android:drawable="@drawable/ma_animation_batu14"
         android:duration="40"/>
     <item android:drawable="@drawable/ma_animation_batu15"
-        android:duration="40"/>
+        android:duration="40"/>-->
     <item android:drawable="@drawable/ma_animation_batu16"
         android:duration="40"/>
     <item android:drawable="@drawable/ma_animation_batu17"

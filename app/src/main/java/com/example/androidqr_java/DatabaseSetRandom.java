@@ -1,17 +1,8 @@
 package com.example.androidqr_java;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.AsyncTask;
-import android.text.PrecomputedText;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
 
@@ -23,12 +14,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class DatabaseExistence {
+public class DatabaseSetRandom {
 
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
     //判定
     private int frag = 2;
-    private String id = "";
 
     String GAS_URL;
 
@@ -58,15 +48,11 @@ public class DatabaseExistence {
 
                     final String jsonstr = response.body().string();
 
+                    Log.i("mmmmmmmm", jsonstr);
                     Log.i("mmmmmmmm", String.valueOf(jsonstr.length()));
-                    if (jsonstr.length() > 2) {
-
-                        String[] a = jsonstr.split("\"");
-
-                        Log.i("mmmmmmmm", a[1]);
+                    if (jsonstr == "1") {
 
                         frag = 1;
-                        id = a[1];
                         Log.i("mmmmm","true");
                     }
                     else {
@@ -81,27 +67,13 @@ public class DatabaseExistence {
         });
     }
 
-    DatabaseExistence(String url, String id, String gmail, String lineID){
+    DatabaseSetRandom(String url, String id, String random){
         //okhttpを利用するカスタム関数（下記）
         GAS_URL = url;
         Log.i("mmmmm",GAS_URL);
-        String json;
-        if(id != null){
-            json = "{\"mode\":\"existence\", " +
-                    "\"id\":\"" + id + "\"" +
-                    "}";
-        }
-        else if (gmail != null){
-            json = "{\"mode\":\"existence\", " +
-                    "\"gmail\":\"" + gmail + "\""+
-                    "}";
-        }
-        else{
-            Log.i("mmmmm","jj");
-            json = "{\"mode\":\"existence\", " +
-                    "\"lineId\":\"" + lineID + "\"" +
-                    "}";
-        }
+        String json = "{\"mode\":\"setrandom\", " +
+                    "\"id\":\"" + id + "\"," +
+                    "\"random\":\"" + random + "\"}";
         try {
             httpRequest(GAS_URL, json);
         }catch (IOException e){
@@ -113,7 +85,5 @@ public class DatabaseExistence {
     int getFrag(){
         return frag;
     }
-    String getId(){
-        return  id;
-    }
 }
+

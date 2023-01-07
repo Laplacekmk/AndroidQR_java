@@ -108,6 +108,13 @@ public class SecondActivity extends AppCompatActivity {
             editor.remove(getString(R.string.sp_ac_lineID));
             editor.remove(getString(R.string.sp_ac_gmail));
             editor.commit();
+            gsc.signOut()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            // ...
+                        }
+                    });
             finish();
             startActivity(new Intent(SecondActivity.this, SignInActivity.class));
         }

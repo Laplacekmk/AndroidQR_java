@@ -16,7 +16,7 @@
     <string name="login_google">Googleでログイン</string>
     <string name="google">google</string>
     <string name="server_client_id">672366818124-qvd8n08dll3m57f9nq0p2koc2rcd27i7.apps.googleusercontent.com</string>
-    <string name="GAS_URL">https://script.google.com/macros/s/AKfycbwCnzOMvQ4Tx6fojVg4cjTU0kOxknjd1cZwG9JofrevJDKbjtbD0Pq82W4rFMTasK6x/exec</string>
+    <string name="GAS_URL">https://script.google.com/macros/s/AKfycbyPS8EXKJ0fAjz9au5sAfajGOKiVSr1mBmlcRZ7tFmSjvp5qVStK96mGLbbbJguM-W1/exec</string>
     <string name="MediaType">application/json; charset=utf-8</string>
     <string name="pre_googleSignInCheck">pre_googleSignInAccount</string>
     <!--line-->
@@ -37,9 +37,16 @@
     <string name="GorL">ログイン時に使用するアカウント</string>
     <string name="or">or</string>
     <!--MainActivity-->
-    <string name="camera">camera</string>
-    <string name="qrcode">QRcode</string>
-    <string name="scan">scan</string>
+    <string name="ma_home">I・AM</string>
+    <string name="ma_camera">camera</string>
+    <string name="ma_qrcode">QRcode</string>
+    <string name="ma_scan">scan</string>
+    <!--MainActivity-->
+    <string name="ma_qrScreen">QR 画面</string>
+    <string name="ma_myList">自分の項目</string>
+    <string name="ma_othersList">履歴</string>
+    <string name="ma_accountChange">アカウント切り替え</string>
+    <string name="ma_signOut">サインアウト</string>
     <!--アカウント情報のSharedPreferences-->
     <string name="sp_account">SharedPreferencesAccount</string>
     <string name="sp_ac_id">SharedPreferencesAccountId</string>

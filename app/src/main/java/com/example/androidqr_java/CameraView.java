@@ -8,6 +8,7 @@ package com.example.androidqr_java;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.WindowManager;
@@ -37,6 +38,9 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
     private ViewCameraBinding binding;
     private CameraBridgeViewBase mOpenCvCameraView;
 
+    private String GAS_URL;
+    private boolean cv_frag = true;
+
     private final String TAG = "CameraView";
     //Handlerの役割は、処理の順を決定したり、スレッド間のやり取りを可能にする
     //参考url：https://sankumee.hatenadiary.org/entry/20120329/1333021847
@@ -50,8 +54,8 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
             new Point(2.0, 2.0) };
 
     // QRcode周囲の線
-    private final static Scalar    LINE_COLOR = new Scalar(0, 255, 0, 255);
-    private final static  int LINE_THICKNESS = 3;
+    private final static Scalar    LINE_COLOR = new Scalar(0, 200, 250, 200);
+    private final static  int LINE_THICKNESS = 2;
     //QRcodeで読み取ったテキスト
     private  String result = null;
 
@@ -80,6 +84,9 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
         super.onCreate(savedInstanceState);
         binding = ViewCameraBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //url
+        GAS_URL = getString(R.string.GAS_URL);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -184,43 +191,61 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
 
     //毎フレーム呼ばれる（返り値は、変更された表示する必要のあるフレーム）
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
+        if(cv_frag) {
 
-        mRgba = inputFrame.rgba();
-        mGray = inputFrame.rgba();
+            mRgba = inputFrame.rgba();
+            mGray = inputFrame.rgba();
 
-        //QRcodeの検出
-        if (mQRCodeDetector.detect(mGray, mPoints)) {
-            try {
-                //QRcode解析
-                result = mQRCodeDetector.decode(mGray, mPoints);
+            //QRcodeの検出
+            if (mQRCodeDetector.detect(mGray, mPoints)) {
+                try {
+                    //QRcode解析
+                    result = mQRCodeDetector.decode(mGray, mPoints);
 
-                //取得した文字をtextviewにセット
-                if (result != null && result.length() > 0){
-                    //結果が取得でき、かつ1文字以上の時に
-                    //QRcode四角形の描画
-                    //文字の描画
-                    drawQuadrangle();
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            binding.getText.setText(result);
-                        }
-                    });
+                    //取得した文字をtextviewにセット
+                    if (result != null && result.length() > 0) {
+                        cv_frag = false;
+                        //結果が取得でき、かつ1文字以上の時に
+                        //QRcode四角形の描画
+                        //文字の描画
+                        drawQuadrangle();
+                        Log.i("mmmmm", "jjj");
+
+                        //判定が出るまでループ--------------------------------
+                        Handler mainHandler = new Handler(Looper.getMainLooper());
+                        DatabaseGetRandom dGR = new DatabaseGetRandom(GAS_URL, result);
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (dGR.getFrag() != 2) {
+                                    binding.getText.setText(dGR.getId());
+                                } else {
+                                    //待ち
+                                    Log.i("mmmmmm", "ssk");
+                                    mainHandler.postDelayed(this, 100);
+                                }
+                            }
+                        };
+                        mainHandler.post(r);
+                        //---------------------------------------
+
+                    } else {
+                        //取得した文字列の初期化
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                //読み取れなかった瞬間の処理
+                            }
+                        });
+                    }
+                } catch (CvException e) {     //opencvのerrorクラス
+                    e.printStackTrace();
                 }
-                else{
-                    //取得した文字列の初期化
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            binding.getText.setText(null);
-                        }
-                    });
-                }
-            } catch (CvException e) {     //opencvのerrorクラス
-                e.printStackTrace();
             }
         }
-
+        else {
+            drawQuadrangle();
+        }
         return mRgba;
     }
 

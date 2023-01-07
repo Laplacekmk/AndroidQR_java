@@ -1,5 +1,6 @@
 package com.example.androidqr_java;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
@@ -19,10 +20,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.androidqr_java.databinding.ActivityCreateAccountNicknameBinding;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class CreateAccountNicknameActivity extends AppCompatActivity {
 
     private ActivityCreateAccountNicknameBinding binding;
+
+    GoogleSignInOptions gso;
+    GoogleSignInClient gsc;
 
     private InputMethodManager inputMethodManager;
     private EditText nicknameEdit;
@@ -35,6 +44,19 @@ public class CreateAccountNicknameActivity extends AppCompatActivity {
         binding = ActivityCreateAccountNicknameBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //signOut用
+        //googleSignIn(公式：https://developers.google.com/identity/sign-in/android/sign-in)
+        //アカウントの基本情報とemailを取得するようにサインインを構成
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        //googleSignInAPIと対話するためのオブジェクト
+        gsc = GoogleSignIn.getClient(this,gso);
+        gsc.signOut()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
 
         //キーボード表示を制御するためのオブジェクト
         inputMethodManager =  (InputMethodManager) getApplication().getSystemService(getApplication().INPUT_METHOD_SERVICE);
