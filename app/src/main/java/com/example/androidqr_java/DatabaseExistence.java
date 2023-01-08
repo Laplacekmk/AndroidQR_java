@@ -28,6 +28,7 @@ public class DatabaseExistence {
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
     //判定
     private int frag = 2;
+    private String id = "";
 
     String GAS_URL;
 
@@ -46,21 +47,26 @@ public class DatabaseExistence {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                frag = 1;
+                frag = 0;
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Log.i("mmmmm","kk");
                 if(response.isSuccessful()) {
                     Log.i("mmmmmmmmm", "response Successful");
 
                     final String jsonstr = response.body().string();
 
-                    Log.i("mmmmmmmm", jsonstr);
                     Log.i("mmmmmmmm", String.valueOf(jsonstr.length()));
                     if (jsonstr.length() > 2) {
 
+                        String[] a = jsonstr.split("\"");
+
+                        Log.i("mmmmmmmm", a[1]);
+
                         frag = 1;
+                        id = a[1];
                         Log.i("mmmmm","true");
                     }
                     else {
@@ -69,7 +75,7 @@ public class DatabaseExistence {
                 }
                 else{
                     String res = String.valueOf(response.isSuccessful());
-                    frag = 1;
+                    frag = 0;
                 }
             }
         });
@@ -91,6 +97,7 @@ public class DatabaseExistence {
                     "}";
         }
         else{
+            Log.i("mmmmm","jj");
             json = "{\"mode\":\"existence\", " +
                     "\"lineId\":\"" + lineID + "\"" +
                     "}";
@@ -99,11 +106,14 @@ public class DatabaseExistence {
             httpRequest(GAS_URL, json);
         }catch (IOException e){
             //失敗した時の処理
-            frag = 1;
+            frag = 0;
         }
     }
 
     int getFrag(){
         return frag;
+    }
+    String getId(){
+        return  id;
     }
 }

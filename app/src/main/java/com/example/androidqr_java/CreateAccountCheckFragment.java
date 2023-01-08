@@ -124,6 +124,7 @@ public class CreateAccountCheckFragment extends Fragment {
             editor.putString(getString(R.string.sp_ac_id), ulid);
             editor.putString(getString(R.string.sp_ac_gmail), Gmail);
             editor.putString(getString(R.string.sp_ac_lineID), LineId);
+            editor.putString(getString(R.string.sp_ac_nickname), nickname);
             editor.apply();
             //仮idを消去
             sharedPref = activity.getSharedPreferences(getString(R.string.pre_googleSignInCheck),activity.MODE_PRIVATE);
