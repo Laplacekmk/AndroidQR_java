@@ -102,13 +102,40 @@
             android:id="@+id/ma_accountChange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="13sp"
             android:text="@string/ma_accountChange"
             android:background="@color/clear"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_bias="0.75"/>
+            app:layout_constraintVertical_bias="0.72"/>
+        <Button
+            android:id="@+id/ma_google"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="@string/google"
+            android:textColor="@color/deepGray"
+            android:textSize="11sp"
+            android:padding="1dp"
+            android:background="@drawable/login_button_back_google"
+            app:layout_constraintTop_toBottomOf="@id/ma_accountChange"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@id/ma_line"
+            app:layout_constraintHorizontal_bias="0.6"/>
+        <Button
+            android:id="@+id/ma_line"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="@string/line"
+            android:textColor="@color/deepGray"
+            android:textSize="11sp"
+            android:padding="1dp"
+            android:background="@drawable/login_button_back"
+            app:layout_constraintTop_toBottomOf="@id/ma_accountChange"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/ma_google"
+            app:layout_constraintHorizontal_bias="0.4"/>
         <Button
             android:id="@+id/ma_signOut"
             android:layout_width="wrap_content"
@@ -130,5 +157,24 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/ma_animation_batu10"/>
+
+    <!--ロード中の黒画面-->
+    <ImageView
+        android:id="@+id/ma_load"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <!--プログレスダイアログ-->
+    <ProgressBar
+        android:id="@+id/ma_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@color/teal_200"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

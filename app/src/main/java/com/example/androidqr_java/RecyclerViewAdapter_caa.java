@@ -30,7 +30,6 @@ public class RecyclerViewAdapter_caa extends RecyclerView.Adapter<RecyclerView.V
     final Integer cb_gray = 0;
     final Integer cb_color = 1;
 
-
     public  RecyclerViewAdapter_caa(CreateAccountActivity context,String title,List<String> name,Integer titleNumber){
         this.context = context;
         this.title = title;
