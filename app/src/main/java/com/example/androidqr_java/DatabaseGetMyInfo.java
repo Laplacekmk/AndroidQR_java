@@ -66,15 +66,6 @@ public class DatabaseGetMyInfo {
                             id = Json.getString("id");
                             nickname = Json.getString("nickname");
                             info = Json.getString("info");
-                            Handler mainHandler = new Handler(Looper.getMainLooper());
-                            mainHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.i("mmmmmmm", id);
-                                    Log.i("mmmmmmm", nickname);
-                                    Log.i("mmmmmmm", info);
-                                }
-                            });
                             frag=1;
                         } catch (Exception e) {
                             Log.i("mmmmmm", "String to Json Failure");
@@ -104,7 +95,6 @@ public class DatabaseGetMyInfo {
 
     void SetMyInfo(){
         //okhttpを利用するカスタム関数（下記）
-        Log.i("mmmmm",GAS_URL);
         String json;
         if(id != null){
             json = "{\"mode\":\"getMyInfo\", " +

@@ -6,12 +6,17 @@
 * */
 package com.example.androidqr_java;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+
+import androidx.activity.result.ActivityResultLauncher;
+
 import com.example.androidqr_java.databinding.ViewCameraBinding;
 
 //カメラ関係
@@ -30,6 +35,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.CvException;
 import org.opencv.imgproc.Imgproc;
 
+import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +44,8 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
     private ViewCameraBinding binding;
     private CameraBridgeViewBase mOpenCvCameraView;
 
+    private SharedPreferences sharedPref;
+    private String account_id;
     private String GAS_URL;
     private boolean cv_frag = true;
 
@@ -85,6 +93,8 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
         binding = ViewCameraBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        sharedPref = CameraView.this.getSharedPreferences(getString(R.string.sp_account), getApplication().MODE_PRIVATE);
+        account_id = sharedPref.getString(getString(R.string.sp_ac_id), null);
         //url
         GAS_URL = getString(R.string.GAS_URL);
 
@@ -96,7 +106,11 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
         //フレーム処理や描画等の、カメラとOpenCVライブラリとのやり取りを実装
         mOpenCvCameraView.setCvCameraViewListener(this);
 
-        Log_i("oncreate");
+        binding.cvBack.setOnClickListener(v -> {
+            Intent intent = new Intent(CameraView.this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -213,12 +227,23 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
 
                         //判定が出るまでループ--------------------------------
                         Handler mainHandler = new Handler(Looper.getMainLooper());
-                        DatabaseGetRandom dGR = new DatabaseGetRandom(GAS_URL, result);
+                        DatabaseGetRandom dGR = new DatabaseGetRandom(GAS_URL, result, account_id);
                         Runnable r = new Runnable() {
                             @Override
                             public void run() {
                                 if (dGR.getFrag() != 2) {
-                                    binding.getText.setText(dGR.getId());
+                                    Intent intent;
+                                    if(dGR.getFrag() == 1) {
+                                        String id = dGR.getId();
+
+                                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        intent.putExtra("id",id);
+                                    }
+                                    else{
+                                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    }
+                                    setResult(RESULT_OK,intent);
+                                    finish();
                                 } else {
                                     //待ち
                                     Log.i("mmmmmm", "ssk");

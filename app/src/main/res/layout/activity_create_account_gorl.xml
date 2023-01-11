@@ -82,6 +82,16 @@
         app:layout_constraintLeft_toLeftOf="@id/gol_line"
         app:layout_constraintRight_toRightOf="@id/gol_line"
         android:gravity="center"/>
+    <TextView
+        android:id="@+id/caa_GroL_backSi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="戻る"
+        android:textColor="@color/shallowGray"
+        app:layout_constraintTop_toBottomOf="@id/gol_line"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <!--ロード中の黒画面-->
     <ImageView

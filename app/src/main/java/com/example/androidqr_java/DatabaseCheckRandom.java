@@ -14,14 +14,17 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class DatabaseGetRandom {
+public class DatabaseCheckRandom {
 
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
     //判定
     private int frag = 2;
     String id;
-
+    String random;
     String GAS_URL;
+    int count = 0;
+
+    MainActivity context;
 
     private void httpRequest(String url,String json) throws IOException {
 
@@ -57,27 +60,41 @@ public class DatabaseGetRandom {
                         Log.i("mmmmmmmm", a[1]);
                         frag = 1;
                         id = a[1];
-                        Log.i("mmmmm","true");
+                        Log.i("mmmmm","みつかった");
+                        context.set_ma_cc(id);
                     }
-                    else {
-                        frag = 0;
+                    else if(count < 3){
+                        checkRandom();
+                        Log.i("mmmmm","みつからｎ");
+                    }
+                    else{
+                        if(context.qrcode_frag && !context.qrRun_state_frag){
+                            context.createQR();
+                        }
                     }
                 }
                 else{
                     String res = String.valueOf(response.isSuccessful());
                     frag = 0;
                 }
+
+                count++;
             }
         });
     }
 
-    DatabaseGetRandom(String url,String random,String id){
+    DatabaseCheckRandom(String url,String random,String id,MainActivity context){
+        this.GAS_URL = url;
+        this.random = random;
+        this.id = id;
+        this.context = context;
+    }
+
+    void checkRandom (){
         //okhttpを利用するカスタム関数（下記）
-        GAS_URL = url;
-        Log.i("mmmmm",GAS_URL);
-        String json = "{\"mode\":\"getrandom\", " +
-                    "\"random\":\"" + random +"\","+
-                    "\"id\":\"" + id +"\"}";
+        String json = "{\"mode\":\"checkRandom\", " +
+                "\"random\":\"" + random +"\","+
+                "\"id\":\"" + id +"\"}";
         try {
             httpRequest(GAS_URL, json);
         }catch (IOException e){

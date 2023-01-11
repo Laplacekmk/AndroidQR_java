@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -72,6 +73,7 @@ public class CreateAccountGorLActivity extends AppCompatActivity {
             1.0f, 0.9f, 1.0f, 0.9f,
             Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 
+    private TextView nicknameBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +96,12 @@ public class CreateAccountGorLActivity extends AppCompatActivity {
         GAS_URL = getString(R.string.GAS_URL);
 
         // ボタンをクリックした時の処理
-        //ホームへ
         googleImg.setOnClickListener(nvoGs);
         lineImg.setOnClickListener(nvoLs);
+
+        //サインインへ戻り
+        nicknameBack = binding.caaGroLBackSi;
+        nicknameBack.setOnClickListener(nvoBsi);
     }
 
     //googleSignInボタン処理
@@ -269,6 +274,13 @@ public class CreateAccountGorLActivity extends AppCompatActivity {
             return;
         }
     }
+
+    View.OnClickListener nvoBsi = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            navigateToSignInActivity();
+        }
+    };
 
     //ニックネーム画面
     void navigateToSecondActivity(int frag){

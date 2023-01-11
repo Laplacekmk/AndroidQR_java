@@ -1,8 +1,12 @@
 package com.example.androidqr_java;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -14,14 +18,18 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class DatabaseGetRandom {
+public class DatabeseGetInfoCamera {
 
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
     //判定
     private int frag = 2;
-    String id;
 
-    String GAS_URL;
+    private String GAS_URL;
+    private String id;
+    private String nickname;
+    private String info;
+    private String gmail;
+    private String lineID;
 
     private void httpRequest(String url,String json) throws IOException {
 
@@ -43,21 +51,34 @@ public class DatabaseGetRandom {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Log.i("mmmmm","kk");
                 if(response.isSuccessful()) {
                     Log.i("mmmmmmmmm", "response Successful");
 
                     final String jsonstr = response.body().string();
 
-                    Log.i("mmmmmmmm", String.valueOf(jsonstr.length()));
-                    Log.i("mmmmmmmm", jsonstr);
-
                     if (jsonstr.length() > 2) {
-                        String[] a = jsonstr.split("\"");
-                        Log.i("mmmmmmmm", a[1]);
-                        frag = 1;
-                        id = a[1];
-                        Log.i("mmmmm","true");
+                        try {
+                            JSONObject db_Json = new JSONObject(jsonstr);
+                            final String db_status = db_Json.getString("myInfo");
+                            JSONObject Json = new JSONObject(db_status);
+                            id = Json.getString("id");
+                            nickname = Json.getString("nickname");
+                            info = Json.getString("info");
+                            Handler mainHandler = new Handler(Looper.getMainLooper());
+                            mainHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.i("mmmmmmm", id);
+                                    Log.i("mmmmmmm", nickname);
+                                    Log.i("mmmmmmm", info);
+                                }
+                            });
+                            frag=1;
+                        } catch (Exception e) {
+                            Log.i("mmmmmm", "String to Json Failure");
+                            frag=0;
+                        }
+
                     }
                     else {
                         frag = 0;
@@ -71,13 +92,18 @@ public class DatabaseGetRandom {
         });
     }
 
-    DatabaseGetRandom(String url,String random,String id){
+    DatabeseGetInfoCamera(String url, String id){
         //okhttpを利用するカスタム関数（下記）
-        GAS_URL = url;
-        Log.i("mmmmm",GAS_URL);
-        String json = "{\"mode\":\"getrandom\", " +
-                    "\"random\":\"" + random +"\","+
-                    "\"id\":\"" + id +"\"}";
+        this.GAS_URL = url;
+        this.id = id;
+    }
+
+    void SetMyInfo(){
+        //okhttpを利用するカスタム関数（下記）
+        String json;
+        json = "{\"mode\":\"getMyInfo_camera\", " +
+                "\"id\":\"" + id + "\"" +
+                "}";
         try {
             httpRequest(GAS_URL, json);
         }catch (IOException e){
@@ -90,8 +116,12 @@ public class DatabaseGetRandom {
         return frag;
     }
     String getId(){
-        return id;
+        return  id;
+    }
+    String getNickname(){
+        return  nickname;
+    }
+    String getInfo(){
+        return  info;
     }
 }
-
-

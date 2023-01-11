@@ -14,14 +14,16 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class DatabaseGetRandom {
+public class DatabaseAccess {
+
 
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
     //判定
     private int frag = 2;
-    String id;
 
-    String GAS_URL;
+    private String GAS_URL;
+    private String myID;
+    private String othersID;
 
     private void httpRequest(String url,String json) throws IOException {
 
@@ -43,23 +45,18 @@ public class DatabaseGetRandom {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Log.i("mmmmm","kk");
                 if(response.isSuccessful()) {
                     Log.i("mmmmmmmmm", "response Successful");
 
                     final String jsonstr = response.body().string();
+                    Log.i("mmmmm",jsonstr);
 
-                    Log.i("mmmmmmmm", String.valueOf(jsonstr.length()));
-                    Log.i("mmmmmmmm", jsonstr);
-
-                    if (jsonstr.length() > 2) {
-                        String[] a = jsonstr.split("\"");
-                        Log.i("mmmmmmmm", a[1]);
-                        frag = 1;
-                        id = a[1];
-                        Log.i("mmmmm","true");
+                    if (jsonstr.equals("1")) {
+                        Log.i("mmmmm","ok");
+                        frag=1;
                     }
                     else {
+                        Log.i("mmmmm","no");
                         frag = 0;
                     }
                 }
@@ -71,13 +68,21 @@ public class DatabaseGetRandom {
         });
     }
 
-    DatabaseGetRandom(String url,String random,String id){
+    DatabaseAccess(String url, String myID, String othersID){
         //okhttpを利用するカスタム関数（下記）
-        GAS_URL = url;
+        this.GAS_URL = url;
+        this.myID = myID;
+        this.othersID = othersID;
+    }
+
+    void access(){
+        //okhttpを利用するカスタム関数（下記）
         Log.i("mmmmm",GAS_URL);
-        String json = "{\"mode\":\"getrandom\", " +
-                    "\"random\":\"" + random +"\","+
-                    "\"id\":\"" + id +"\"}";
+        String json;
+        json = "{\"mode\":\"access\", " +
+                "\"id\":\"" + myID + "\"," +
+                "\"othersId\":\"" + othersID + "\"" +
+                "}";
         try {
             httpRequest(GAS_URL, json);
         }catch (IOException e){
@@ -89,9 +94,8 @@ public class DatabaseGetRandom {
     int getFrag(){
         return frag;
     }
-    String getId(){
-        return id;
+    void setFrag(int i){
+        frag = i;
     }
 }
-
 
