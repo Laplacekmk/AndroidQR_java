@@ -217,13 +217,13 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
                     result = mQRCodeDetector.decode(mGray, mPoints);
 
                     //取得した文字をtextviewにセット
-                    if (result != null && result.length() > 0) {
+                    if (result != null && result.length() > 30) {
                         cv_frag = false;
                         //結果が取得でき、かつ1文字以上の時に
                         //QRcode四角形の描画
                         //文字の描画
                         drawQuadrangle();
-                        Log.i("mmmmm", "jjj");
+                        Log.i("mmmmm","qr scan : " + result);
 
                         //判定が出るまでループ--------------------------------
                         Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -235,7 +235,6 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
                                     Intent intent;
                                     if(dGR.getFrag() == 1) {
                                         String id = dGR.getId();
-
                                         intent = new Intent(getApplicationContext(), MainActivity.class);
                                         intent.putExtra("id",id);
                                     }
@@ -246,8 +245,7 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
                                     finish();
                                 } else {
                                     //待ち
-                                    Log.i("mmmmmm", "ssk");
-                                    mainHandler.postDelayed(this, 100);
+                                    mainHandler.postDelayed(this, 500);
                                 }
                             }
                         };

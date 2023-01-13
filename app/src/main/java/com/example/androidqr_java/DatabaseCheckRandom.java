@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -29,7 +30,11 @@ public class DatabaseCheckRandom {
     private void httpRequest(String url,String json) throws IOException {
 
         //OkHttpClient生成
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
 
         //request生成
         RequestBody body = RequestBody.create(MIMEType,json);
@@ -61,9 +66,13 @@ public class DatabaseCheckRandom {
                         frag = 1;
                         id = a[1];
                         Log.i("mmmmm","みつかった");
-                        context.set_ma_cc(id);
+                        context.setDGH();
+                        if(context.qrcode_frag && !context.qrRun_state_frag){
+                            context.createQR();
+                        }
+                        //context.set_ma_cc(id);
                     }
-                    else if(count < 3){
+                    else if(count < 5){
                         checkRandom();
                         Log.i("mmmmm","みつからｎ");
                     }
@@ -71,6 +80,7 @@ public class DatabaseCheckRandom {
                         if(context.qrcode_frag && !context.qrRun_state_frag){
                             context.createQR();
                         }
+                        frag = 0;
                     }
                 }
                 else{

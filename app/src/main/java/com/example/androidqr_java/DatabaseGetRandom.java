@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -26,7 +27,11 @@ public class DatabaseGetRandom {
     private void httpRequest(String url,String json) throws IOException {
 
         //OkHttpClient生成
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
 
         //request生成
         RequestBody body = RequestBody.create(MIMEType,json);
@@ -49,8 +54,8 @@ public class DatabaseGetRandom {
 
                     final String jsonstr = response.body().string();
 
-                    Log.i("mmmmmmmm", String.valueOf(jsonstr.length()));
-                    Log.i("mmmmmmmm", jsonstr);
+                    Log.i("mmmmmmmm", "length:"+jsonstr.length());
+                    Log.i("mmmmmmmm", "jsonstr:"+jsonstr);
 
                     if (jsonstr.length() > 2) {
                         String[] a = jsonstr.split("\"");
@@ -74,7 +79,6 @@ public class DatabaseGetRandom {
     DatabaseGetRandom(String url,String random,String id){
         //okhttpを利用するカスタム関数（下記）
         GAS_URL = url;
-        Log.i("mmmmm",GAS_URL);
         String json = "{\"mode\":\"getrandom\", " +
                     "\"random\":\"" + random +"\","+
                     "\"id\":\"" + id +"\"}";

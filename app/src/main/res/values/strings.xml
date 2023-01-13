@@ -16,7 +16,7 @@
     <string name="login_google">Googleでログイン</string>
     <string name="google">google</string>
     <string name="server_client_id">672366818124-qvd8n08dll3m57f9nq0p2koc2rcd27i7.apps.googleusercontent.com</string>
-    <string name="GAS_URL">https://script.google.com/macros/s/AKfycbxTYQw_RWQie9NKyzI-270L40FQzL2_1PBWg6Rw_jjs6R3MSqsgc5SmW9gYHJ97sIpc/exec</string>
+    <string name="GAS_URL">https://script.google.com/macros/s/AKfycbxYzuFG4LkVgeeTkiBopWwlgp2ujaGSLeLP-GKztD8UeKh2S7HgfMCQjt03aMMJJ5Py/exec</string>
     <string name="MediaType">application/json; charset=utf-8</string>
     <string name="pre_googleSignInCheck">pre_googleSignInAccount</string>
     <!--line-->

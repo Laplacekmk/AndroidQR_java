@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,7 +36,11 @@ public class DatabaseGetHistory {
     private void httpRequest(String url,String json) throws IOException {
 
         //OkHttpClient生成
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
 
         //request生成
         RequestBody body = RequestBody.create(MIMEType,json);
@@ -56,7 +61,9 @@ public class DatabaseGetHistory {
                     Log.i("mmmmmmmmm", "response Successful");
 
                     final String jsonstr = response.body().string();
+
                     if (jsonstr.length() > 2) {
+                        Log.i("mmmmm",jsonstr);
                         try {
                             JSONObject db_Json = new JSONObject(jsonstr);
                             final String countS = db_Json.getString("count");
@@ -69,6 +76,7 @@ public class DatabaseGetHistory {
                                 nickname.add(json.getString("nickname"));
                                 info.add(json.getString("info"));
                             }
+                            Log.i("mmmmm",nickname+"");
                             frag=1;
                         } catch (Exception e) {
                             Log.i("mmmmmm", "String to Json Failure");

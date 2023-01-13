@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -34,7 +35,11 @@ public class DatabeseGetInfoCamera {
     private void httpRequest(String url,String json) throws IOException {
 
         //OkHttpClient生成
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
 
         //request生成
         RequestBody body = RequestBody.create(MIMEType,json);
@@ -64,15 +69,6 @@ public class DatabeseGetInfoCamera {
                             id = Json.getString("id");
                             nickname = Json.getString("nickname");
                             info = Json.getString("info");
-                            Handler mainHandler = new Handler(Looper.getMainLooper());
-                            mainHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.i("mmmmmmm", id);
-                                    Log.i("mmmmmmm", nickname);
-                                    Log.i("mmmmmmm", info);
-                                }
-                            });
                             frag=1;
                         } catch (Exception e) {
                             Log.i("mmmmmm", "String to Json Failure");

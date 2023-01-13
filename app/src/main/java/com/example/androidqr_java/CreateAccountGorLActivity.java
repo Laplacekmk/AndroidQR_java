@@ -73,7 +73,7 @@ public class CreateAccountGorLActivity extends AppCompatActivity {
             1.0f, 0.9f, 1.0f, 0.9f,
             Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 
-    private TextView nicknameBack;
+    private TextView BackSignIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +100,8 @@ public class CreateAccountGorLActivity extends AppCompatActivity {
         lineImg.setOnClickListener(nvoLs);
 
         //サインインへ戻り
-        nicknameBack = binding.caaGroLBackSi;
-        nicknameBack.setOnClickListener(nvoBsi);
+        BackSignIn = binding.caaGroLBackSi;
+        BackSignIn.setOnClickListener(nvoBsi);
     }
 
     //googleSignInボタン処理
@@ -182,6 +182,8 @@ public class CreateAccountGorLActivity extends AppCompatActivity {
         editor.remove(getString(R.string.pre_lineSignInCheck));
         editor.commit();
 
+        buttonValid(false);
+
         //googleSignInからの戻りの場合
         if(requestCode == GS_IN){
             //GoogleSignInAccountオブジェクトにはアカウント情報が含まれている
@@ -218,6 +220,7 @@ public class CreateAccountGorLActivity extends AppCompatActivity {
                 }
                 return;
             }catch (ApiException e){
+                buttonValid(true);
                 Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
                 navigateToSignInActivity();
                 return;
@@ -266,9 +269,11 @@ public class CreateAccountGorLActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
                     navigateToSignInActivity();
             }
+            buttonValid(true);
             return;
         }
         else{
+            buttonValid(true);
             Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
             navigateToSignInActivity();
             return;
@@ -306,6 +311,13 @@ public class CreateAccountGorLActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
         }
     }
+
+    void buttonValid(boolean frag){
+        googleImg.setEnabled(frag);
+        lineImg.setEnabled(frag);
+        BackSignIn.setEnabled(frag);
+    }
+
     //ログイン画面
     void navigateToSignInActivity(){
         //仮lineIDを消去

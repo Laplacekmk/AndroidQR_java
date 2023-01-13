@@ -7,7 +7,7 @@ android:color="?android:colorControlHighlight">
         <corners
             android:radius="5dp"/>
         <solid
-            android:color="#2200aaff"/>
+            android:color="#11000000"/>
         <size
             android:height="45dp" />
     </shape>

@@ -51,8 +51,9 @@ public class RecyclerViewAdapter_ma_history extends RecyclerView.Adapter<Recycle
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter_ma_history.ViewHolder holder, int position) {
+        int P = (itemCount - 1) - position;
 
-        String[] othersNumberArray = othersNumber.get(position).split("-");
+        String[] othersNumberArray = othersNumber.get(P).split("-");
         int count = 0;
         for(int i = 0; i < 10; i++){
             for(int x = 0; x < 10; x++) {
@@ -63,7 +64,7 @@ public class RecyclerViewAdapter_ma_history extends RecyclerView.Adapter<Recycle
             }
         }
 
-        holder.NickText.setText(othersNickname.get(position));
+        holder.NickText.setText(othersNickname.get(P));
         holder.CountText.setText(count + "/10");
         if(position % 2 == 0) {
             holder.Image.setImageResource(R.drawable.ma_history_item_b);
@@ -75,6 +76,7 @@ public class RecyclerViewAdapter_ma_history extends RecyclerView.Adapter<Recycle
             //othersListへの遷移
             if(context.history_buttonFrag) {
                 Log.i("mmmmm", "history");
+                context.history_makeRecycler_supported_by_cc(othersNumber.get(P),othersNickname.get(P));
             }
         });
     }
