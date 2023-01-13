@@ -69,35 +69,35 @@
             android:id="@+id/ma_qrScreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/clear"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:text="@string/ma_qrScreen"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_bias="0.30"/>
+            app:layout_constraintVertical_bias="0.25"/>
         <Button
             android:id="@+id/ma_myList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/clear"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:text="@string/ma_myList"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_bias="0.45"/>
+            app:layout_constraintVertical_bias="0.4"/>
         <Button
-            android:id="@+id/ma_othersList"
+            android:id="@+id/ma_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ma_othersList"
-            android:background="@color/clear"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_bias="0.6"/>
+            app:layout_constraintVertical_bias="0.55"/>
         <Button
             android:id="@+id/ma_accountChange"
             android:layout_width="wrap_content"
@@ -109,7 +109,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_bias="0.72"/>
+            app:layout_constraintVertical_bias="0.67"/>
         <Button
             android:id="@+id/ma_google"
             android:layout_width="100dp"
@@ -141,12 +141,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ma_signOut"
-            android:background="@color/clear"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_bias="0.9"/>
+            app:layout_constraintVertical_bias="0.85"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <ImageView
         android:id="@+id/ma_batu_ham"

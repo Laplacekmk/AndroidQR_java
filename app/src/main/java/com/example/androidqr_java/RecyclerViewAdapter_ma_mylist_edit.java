@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,11 +35,13 @@ public class RecyclerViewAdapter_ma_mylist_edit extends RecyclerView.Adapter<Rec
     static class TitleViewHolder extends RecyclerView.ViewHolder{
         TextView titleText;
         ImageView titleImage;
+        ConstraintLayout constraintLayout;
 
         TitleViewHolder(View view){
             super(view);
             titleText = (TextView) view.findViewById(R.id.myList_edit_title_text);
             titleImage = (ImageView) view.findViewById(R.id.myList_edit_title_img);
+            constraintLayout = view.findViewById(R.id.myList_edit_title_constraint);
         }
     }
 
@@ -78,7 +81,7 @@ public class RecyclerViewAdapter_ma_mylist_edit extends RecyclerView.Adapter<Rec
                 titleViewHolder.titleImage
                         .setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ma_mylist_edit_top));
             }
-            titleViewHolder.titleImage.
+            titleViewHolder.constraintLayout.
                     setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

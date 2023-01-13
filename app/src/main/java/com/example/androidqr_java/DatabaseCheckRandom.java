@@ -1,17 +1,8 @@
 package com.example.androidqr_java;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.AsyncTask;
-import android.text.PrecomputedText;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -24,14 +15,17 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class DatabaseExistence {
+public class DatabaseCheckRandom {
 
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
     //判定
     private int frag = 2;
-    private String id = "";
-
+    String id;
+    String random;
     String GAS_URL;
+    int count = 0;
+
+    MainActivity context;
 
     private void httpRequest(String url,String json) throws IOException {
 
@@ -64,17 +58,28 @@ public class DatabaseExistence {
                     final String jsonstr = response.body().string();
 
                     Log.i("mmmmmmmm", String.valueOf(jsonstr.length()));
+                    Log.i("mmmmmmmm", jsonstr);
+
                     if (jsonstr.length() > 2) {
-
                         String[] a = jsonstr.split("\"");
-
                         Log.i("mmmmmmmm", a[1]);
-
                         frag = 1;
                         id = a[1];
-                        Log.i("mmmmm","true");
+                        Log.i("mmmmm","みつかった");
+                        context.setDGH();
+                        if(context.qrcode_frag && !context.qrRun_state_frag){
+                            context.createQR();
+                        }
+                        //context.set_ma_cc(id);
                     }
-                    else {
+                    else if(count < 5){
+                        checkRandom();
+                        Log.i("mmmmm","みつからｎ");
+                    }
+                    else{
+                        if(context.qrcode_frag && !context.qrRun_state_frag){
+                            context.createQR();
+                        }
                         frag = 0;
                     }
                 }
@@ -82,31 +87,24 @@ public class DatabaseExistence {
                     String res = String.valueOf(response.isSuccessful());
                     frag = 0;
                 }
+
+                count++;
             }
         });
     }
 
-    DatabaseExistence(String url, String id, String gmail, String lineID){
+    DatabaseCheckRandom(String url,String random,String id,MainActivity context){
+        this.GAS_URL = url;
+        this.random = random;
+        this.id = id;
+        this.context = context;
+    }
+
+    void checkRandom (){
         //okhttpを利用するカスタム関数（下記）
-        GAS_URL = url;
-        Log.i("mmmmm",GAS_URL);
-        String json;
-        if(id != null){
-            json = "{\"mode\":\"existence\", " +
-                    "\"id\":\"" + id + "\"" +
-                    "}";
-        }
-        else if (gmail != null){
-            json = "{\"mode\":\"existence\", " +
-                    "\"gmail\":\"" + gmail + "\""+
-                    "}";
-        }
-        else{
-            Log.i("mmmmm","jj");
-            json = "{\"mode\":\"existence\", " +
-                    "\"lineId\":\"" + lineID + "\"" +
-                    "}";
-        }
+        String json = "{\"mode\":\"checkRandom\", " +
+                "\"random\":\"" + random +"\","+
+                "\"id\":\"" + id +"\"}";
         try {
             httpRequest(GAS_URL, json);
         }catch (IOException e){
@@ -119,6 +117,8 @@ public class DatabaseExistence {
         return frag;
     }
     String getId(){
-        return  id;
+        return id;
     }
 }
+
+

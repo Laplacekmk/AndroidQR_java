@@ -164,13 +164,13 @@ public class MapCreate {
         String[] splitList = List.split("-");
         String[] s;
         int x;
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < splitList.length; i++){
             selected_number.add(splitList[i]);
             s = splitList[i].split(",");
             x = Integer.parseInt(s[0]);
             selected_title.add(titles[x]);
-            if(titles[x] != null) Log.i("mmmmm",titles[x]);
-            if(item_map_name.get(splitList[i]) != null) Log.i("mmmmm",item_map_name.get(splitList[i]));
+            //if(titles[x] != null) Log.i("mmmmm",titles[x]);
+            //if(item_map_name.get(splitList[i]) != null) Log.i("mmmmm",item_map_name.get(splitList[i]));
             selected_item.add(item_map_name.get(splitList[i]));
         }
     }

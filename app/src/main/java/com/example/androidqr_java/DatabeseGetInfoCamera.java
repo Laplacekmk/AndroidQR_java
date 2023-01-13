@@ -1,17 +1,12 @@
 package com.example.androidqr_java;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.AsyncTask;
-import android.text.PrecomputedText;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -24,14 +19,18 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class DatabaseExistence {
+public class DatabeseGetInfoCamera {
 
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
     //判定
     private int frag = 2;
-    private String id = "";
 
-    String GAS_URL;
+    private String GAS_URL;
+    private String id;
+    private String nickname;
+    private String info;
+    private String gmail;
+    private String lineID;
 
     private void httpRequest(String url,String json) throws IOException {
 
@@ -57,22 +56,25 @@ public class DatabaseExistence {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Log.i("mmmmm","kk");
                 if(response.isSuccessful()) {
                     Log.i("mmmmmmmmm", "response Successful");
 
                     final String jsonstr = response.body().string();
 
-                    Log.i("mmmmmmmm", String.valueOf(jsonstr.length()));
                     if (jsonstr.length() > 2) {
+                        try {
+                            JSONObject db_Json = new JSONObject(jsonstr);
+                            final String db_status = db_Json.getString("myInfo");
+                            JSONObject Json = new JSONObject(db_status);
+                            id = Json.getString("id");
+                            nickname = Json.getString("nickname");
+                            info = Json.getString("info");
+                            frag=1;
+                        } catch (Exception e) {
+                            Log.i("mmmmmm", "String to Json Failure");
+                            frag=0;
+                        }
 
-                        String[] a = jsonstr.split("\"");
-
-                        Log.i("mmmmmmmm", a[1]);
-
-                        frag = 1;
-                        id = a[1];
-                        Log.i("mmmmm","true");
                     }
                     else {
                         frag = 0;
@@ -86,27 +88,18 @@ public class DatabaseExistence {
         });
     }
 
-    DatabaseExistence(String url, String id, String gmail, String lineID){
+    DatabeseGetInfoCamera(String url, String id){
         //okhttpを利用するカスタム関数（下記）
-        GAS_URL = url;
-        Log.i("mmmmm",GAS_URL);
+        this.GAS_URL = url;
+        this.id = id;
+    }
+
+    void SetMyInfo(){
+        //okhttpを利用するカスタム関数（下記）
         String json;
-        if(id != null){
-            json = "{\"mode\":\"existence\", " +
-                    "\"id\":\"" + id + "\"" +
-                    "}";
-        }
-        else if (gmail != null){
-            json = "{\"mode\":\"existence\", " +
-                    "\"gmail\":\"" + gmail + "\""+
-                    "}";
-        }
-        else{
-            Log.i("mmmmm","jj");
-            json = "{\"mode\":\"existence\", " +
-                    "\"lineId\":\"" + lineID + "\"" +
-                    "}";
-        }
+        json = "{\"mode\":\"getMyInfo_camera\", " +
+                "\"id\":\"" + id + "\"" +
+                "}";
         try {
             httpRequest(GAS_URL, json);
         }catch (IOException e){
@@ -120,5 +113,11 @@ public class DatabaseExistence {
     }
     String getId(){
         return  id;
+    }
+    String getNickname(){
+        return  nickname;
+    }
+    String getInfo(){
+        return  info;
     }
 }

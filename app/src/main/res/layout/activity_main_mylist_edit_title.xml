@@ -7,6 +7,7 @@
     android:layout_marginLeft="60dp"
     android:paddingBottom="5dp">
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/myList_edit_title_constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/ma_mylist_edit_title">

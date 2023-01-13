@@ -60,6 +60,7 @@
         android:text="変更する"
         android:background="@drawable/stroke_teal_"
         android:paddingVertical="5dp"
-        android:paddingHorizontal="20dp" />
+        android:paddingHorizontal="20dp"
+        android:visibility="invisible"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

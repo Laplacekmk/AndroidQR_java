@@ -1,17 +1,8 @@
 package com.example.androidqr_java;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.AsyncTask;
-import android.text.PrecomputedText;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -24,14 +15,16 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class DatabaseExistence {
+public class DatabaseAccess {
+
 
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
     //判定
     private int frag = 2;
-    private String id = "";
 
-    String GAS_URL;
+    private String GAS_URL;
+    private String myID;
+    private String othersID;
 
     private void httpRequest(String url,String json) throws IOException {
 
@@ -57,24 +50,18 @@ public class DatabaseExistence {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Log.i("mmmmm","kk");
                 if(response.isSuccessful()) {
                     Log.i("mmmmmmmmm", "response Successful");
 
                     final String jsonstr = response.body().string();
+                    Log.i("mmmmm",jsonstr);
 
-                    Log.i("mmmmmmmm", String.valueOf(jsonstr.length()));
-                    if (jsonstr.length() > 2) {
-
-                        String[] a = jsonstr.split("\"");
-
-                        Log.i("mmmmmmmm", a[1]);
-
-                        frag = 1;
-                        id = a[1];
-                        Log.i("mmmmm","true");
+                    if (jsonstr.equals("1")) {
+                        Log.i("mmmmm","ok");
+                        frag=1;
                     }
                     else {
+                        Log.i("mmmmm","no");
                         frag = 0;
                     }
                 }
@@ -86,27 +73,21 @@ public class DatabaseExistence {
         });
     }
 
-    DatabaseExistence(String url, String id, String gmail, String lineID){
+    DatabaseAccess(String url, String myID, String othersID){
         //okhttpを利用するカスタム関数（下記）
-        GAS_URL = url;
+        this.GAS_URL = url;
+        this.myID = myID;
+        this.othersID = othersID;
+    }
+
+    void access(){
+        //okhttpを利用するカスタム関数（下記）
         Log.i("mmmmm",GAS_URL);
         String json;
-        if(id != null){
-            json = "{\"mode\":\"existence\", " +
-                    "\"id\":\"" + id + "\"" +
-                    "}";
-        }
-        else if (gmail != null){
-            json = "{\"mode\":\"existence\", " +
-                    "\"gmail\":\"" + gmail + "\""+
-                    "}";
-        }
-        else{
-            Log.i("mmmmm","jj");
-            json = "{\"mode\":\"existence\", " +
-                    "\"lineId\":\"" + lineID + "\"" +
-                    "}";
-        }
+        json = "{\"mode\":\"access\", " +
+                "\"id\":\"" + myID + "\"," +
+                "\"othersId\":\"" + othersID + "\"" +
+                "}";
         try {
             httpRequest(GAS_URL, json);
         }catch (IOException e){
@@ -118,7 +99,8 @@ public class DatabaseExistence {
     int getFrag(){
         return frag;
     }
-    String getId(){
-        return  id;
+    void setFrag(int i){
+        frag = i;
     }
 }
+

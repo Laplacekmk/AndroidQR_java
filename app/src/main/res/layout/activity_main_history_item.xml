@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:id="@+id/history_item_img"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="-15dp"
+        android:background="@drawable/ma_history_item_b"/>
+    <TextView
+        android:id="@+id/history_item_nick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/deepGray"
+        app:layout_constraintTop_toTopOf="@id/history_item_img"
+        app:layout_constraintBottom_toBottomOf="@id/history_item_img"
+        app:layout_constraintLeft_toLeftOf="@id/history_item_img"
+        app:layout_constraintRight_toLeftOf="@id/history_item_count"
+        app:layout_constraintHorizontal_bias="0.25"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="一致項目数"
+        android:textSize="13sp"
+        app:layout_constraintTop_toTopOf="@id/history_item_img"
+        app:layout_constraintBottom_toBottomOf="@id/history_item_img"
+        app:layout_constraintRight_toLeftOf="@id/history_item_count"
+        android:layout_marginRight="10dp"/>
+
+    <TextView
+        android:id="@+id/history_item_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        app:layout_constraintTop_toTopOf="@id/history_item_img"
+        app:layout_constraintBottom_toBottomOf="@id/history_item_img"
+        app:layout_constraintLeft_toLeftOf="@id/history_item_img"
+        app:layout_constraintRight_toRightOf="@id/history_item_img"
+        app:layout_constraintHorizontal_bias="0.8"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

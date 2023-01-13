@@ -1,19 +1,16 @@
 package com.example.androidqr_java;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.AsyncTask;
-import android.text.PrecomputedText;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -24,14 +21,17 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class DatabaseExistence {
+public class DatabaseGetHistory {
 
     private static final MediaType MIMEType = MediaType.get("application/json; charset=utf-8");
     //判定
     private int frag = 2;
-    private String id = "";
 
-    String GAS_URL;
+    private String GAS_URL;
+    private String othersID;
+    private List<String> id = new ArrayList<String>();
+    private List<String> nickname = new ArrayList<String>();;
+    private List<String> info = new ArrayList<String>();;
 
     private void httpRequest(String url,String json) throws IOException {
 
@@ -57,22 +57,32 @@ public class DatabaseExistence {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Log.i("mmmmm","kk");
                 if(response.isSuccessful()) {
                     Log.i("mmmmmmmmm", "response Successful");
 
                     final String jsonstr = response.body().string();
 
-                    Log.i("mmmmmmmm", String.valueOf(jsonstr.length()));
                     if (jsonstr.length() > 2) {
+                        Log.i("mmmmm",jsonstr);
+                        try {
+                            JSONObject db_Json = new JSONObject(jsonstr);
+                            final String countS = db_Json.getString("count");
+                            int countI = Integer.valueOf(countS);
+                            String json_history;
+                            for(int i = 0; i < countI; i++){
+                                json_history = db_Json.getString(String.valueOf(i));
+                                JSONObject json = new JSONObject(json_history);
+                                id.add(json.getString("id"));
+                                nickname.add(json.getString("nickname"));
+                                info.add(json.getString("info"));
+                            }
+                            Log.i("mmmmm",nickname+"");
+                            frag=1;
+                        } catch (Exception e) {
+                            Log.i("mmmmmm", "String to Json Failure");
+                            frag=0;
+                        }
 
-                        String[] a = jsonstr.split("\"");
-
-                        Log.i("mmmmmmmm", a[1]);
-
-                        frag = 1;
-                        id = a[1];
-                        Log.i("mmmmm","true");
                     }
                     else {
                         frag = 0;
@@ -86,27 +96,18 @@ public class DatabaseExistence {
         });
     }
 
-    DatabaseExistence(String url, String id, String gmail, String lineID){
+    DatabaseGetHistory(String url, String id){
         //okhttpを利用するカスタム関数（下記）
-        GAS_URL = url;
-        Log.i("mmmmm",GAS_URL);
+        this.GAS_URL = url;
+        this.othersID = id;
+    }
+
+    void SetHistory(){
+        //okhttpを利用するカスタム関数（下記）
         String json;
-        if(id != null){
-            json = "{\"mode\":\"existence\", " +
-                    "\"id\":\"" + id + "\"" +
-                    "}";
-        }
-        else if (gmail != null){
-            json = "{\"mode\":\"existence\", " +
-                    "\"gmail\":\"" + gmail + "\""+
-                    "}";
-        }
-        else{
-            Log.i("mmmmm","jj");
-            json = "{\"mode\":\"existence\", " +
-                    "\"lineId\":\"" + lineID + "\"" +
-                    "}";
-        }
+        json = "{\"mode\":\"getHistory\", " +
+               "\"othersId\":\"" + othersID + "\"" +
+               "}";
         try {
             httpRequest(GAS_URL, json);
         }catch (IOException e){
@@ -118,7 +119,13 @@ public class DatabaseExistence {
     int getFrag(){
         return frag;
     }
-    String getId(){
+    List<String> getOthersId(){
         return  id;
+    }
+    List<String> getOthersNickname(){
+        return  nickname;
+    }
+    List<String> getOthersInfo(){
+        return  info;
     }
 }

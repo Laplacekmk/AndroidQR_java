@@ -81,11 +81,9 @@ public class SignInActivity extends AppCompatActivity {
     private LoginDelegate loginDelegate = LoginDelegate.Factory.create();
     final int LS_IN = 1001;
     String lineID;
-    /*
-    ScaleAnimation btnEffect = new ScaleAnimation(
-            1.0f, 0.9f, 1.0f, 0.9f,
-            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-*/
+
+    TextView buttonCaa;
+    //url
     String GAS_URL;
 
     private DatabaseGetMyInfo dG;
@@ -137,36 +135,14 @@ public class SignInActivity extends AppCompatActivity {
         buttonLINE.setOnClickListener(nvoLs);
 
         //createAccount処理
-        TextView caaText = binding.createAccount;
-        caaText.setOnClickListener(nvoCaa);
+        buttonCaa = binding.createAccount;
+        buttonCaa.setOnClickListener(nvoCaa);
     }
 
     //googleSignInボタン処理
     private  View.OnClickListener nvoGs = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            /*
-            btnEffect.setDuration(400);
-            btnEffect.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    Log.i("mmmmmmmmm", String.valueOf(animation));
-                    Intent signInIntent = gsc.getSignInIntent();
-                    startActivityForResult(signInIntent, GS_IN);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-            buttonGoogle.startAnimation(btnEffect);
-            */
             Intent signInIntent = gsc.getSignInIntent();
             startActivityForResult(signInIntent, GS_IN);
         }
@@ -176,38 +152,6 @@ public class SignInActivity extends AppCompatActivity {
     private  View.OnClickListener nvoLs = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            /*
-            btnEffect.setDuration(400);
-            btnEffect.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    Log.i("mmmmmmmmm", String.valueOf(animation));
-                    try {
-                        // App-to-app login
-                        Intent signInIntent = LineLoginApi.getLoginIntent(
-                                view.getContext(),
-                                getString(R.string.chanelID),
-                                new LineAuthenticationParams.Builder()
-                                        .scopes(Arrays.asList(Scope.PROFILE))
-                                        .build());
-                        startActivityForResult(signInIntent, LS_IN);
-                    } catch (Exception e) {
-                        Log.e("mmmmmmmmmmm", e.toString());
-                    }
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-            buttonLINE.startAnimation(btnEffect);
-            */
             try {
                 // App-to-app login
                 Intent signInIntent = LineLoginApi.getLoginIntent(
@@ -227,6 +171,8 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+
+        buttonValid(false);
 
         //googleSignInからの戻りの場合
         if(requestCode == GS_IN){
@@ -252,7 +198,7 @@ public class SignInActivity extends AppCompatActivity {
                                 navigateToSecondActivity(dG.getFrag());
                             }
                             else {
-                                mainHandler.postDelayed(this, 100);
+                                mainHandler.postDelayed(this, 500);
                             }
                         }
                     };
@@ -261,6 +207,7 @@ public class SignInActivity extends AppCompatActivity {
                 }
                 return;
             }catch (ApiException e){
+                buttonValid(true);
                 Toast.makeText(getApplicationContext(), "Wrong", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -286,7 +233,7 @@ public class SignInActivity extends AppCompatActivity {
                                 navigateToSecondActivity(dG.getFrag());
                             }
                             else {
-                                mainHandler.postDelayed(this, 100);
+                                mainHandler.postDelayed(this, 500);
                             }
                         }
                     };
@@ -304,9 +251,11 @@ public class SignInActivity extends AppCompatActivity {
                     Log.i("mmmmmmmmm", result.getErrorData().toString());
                     Toast.makeText(getApplicationContext(), "LINE Login Canceled", Toast.LENGTH_SHORT).show();
             }
+            buttonValid(true);
             return;
         }
         else{
+            buttonValid(true);
             Log.i("mmmmmmmmm", "Unsupported Request");
             return;
         }
@@ -334,6 +283,7 @@ public class SignInActivity extends AppCompatActivity {
             startActivity(intent);
         }
         else{
+            buttonValid(true);
             gsc.signOut()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -356,6 +306,12 @@ public class SignInActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
+    void buttonValid(boolean frag){
+        buttonGoogle.setEnabled(frag);
+        buttonLINE.setEnabled(frag);
+        buttonCaa.setEnabled(frag);
+    }
 
     @Override
     protected void onStop(){
