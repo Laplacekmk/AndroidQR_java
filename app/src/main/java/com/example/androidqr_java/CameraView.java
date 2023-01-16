@@ -62,8 +62,8 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
             new Point(2.0, 2.0) };
 
     // QRcode周囲の線
-    private final static Scalar    LINE_COLOR = new Scalar(0, 200, 250, 200);
-    private final static  int LINE_THICKNESS = 2;
+    private final static Scalar    LINE_COLOR0 = new Scalar(0, 255, 200,  50);
+    private final static  int LINE_THICKNESS = 3;
     //QRcodeで読み取ったテキスト
     private  String result = null;
 
@@ -288,6 +288,21 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
         //取得したポイントが4つ出なければ描画しない
         if(length != 4) return;
 
+        double r = (pointsArray[2].y - pointsArray[0].y)/2;
+
+        if(pointsArray[0].y >= pointsArray[1].y) {
+            pointsArray[0].y = pointsArray[1].y;
+            pointsArray[1].x = pointsArray[2].x;
+            pointsArray[2].y = pointsArray[3].y;
+            pointsArray[3].x = pointsArray[0].x;
+        }
+        else {
+            pointsArray[0].x = pointsArray[3].x;
+            pointsArray[1].y = pointsArray[0].y;
+            pointsArray[2].x = pointsArray[1].x;
+            pointsArray[3].y = pointsArray[2].y;
+        }
+
         //取得したポイントが4つであれば描画する
         for (i = 0; i < length; i++) {
 
@@ -300,9 +315,26 @@ public class CameraView extends CameraActivity implements CvCameraViewListener2 
             }
 
             pt1 = pointsArray[i];
-            pt2 = pointsArray[i2];
+            int m = 25;
 
-            Imgproc.line(mRgba, pt1, pt2, LINE_COLOR, LINE_THICKNESS);
+            switch (i){
+                case 0:
+                    Imgproc.line(mRgba, pt1, new Point(pt1.x + m, pt1.y), LINE_COLOR0, LINE_THICKNESS);
+                    Imgproc.line(mRgba, pt1, new Point(pt1.x, pt1.y + m), LINE_COLOR0, LINE_THICKNESS);
+                    break;
+                case 1:
+                    Imgproc.line(mRgba, pt1, new Point(pt1.x - m,pt1.y), LINE_COLOR0, LINE_THICKNESS);
+                    Imgproc.line(mRgba, pt1, new Point(pt1.x,pt1.y + m), LINE_COLOR0, LINE_THICKNESS);
+                    break;
+                case 2:
+                    Imgproc.line(mRgba, pt1, new Point(pt1.x - m,pt1.y), LINE_COLOR0, LINE_THICKNESS);
+                    Imgproc.line(mRgba, pt1, new Point(pt1.x,pt1.y - m), LINE_COLOR0, LINE_THICKNESS);
+                    break;
+                case 3:
+                    Imgproc.line(mRgba, pt1, new Point(pt1.x + m, pt1.y), LINE_COLOR0, LINE_THICKNESS);
+                    Imgproc.line(mRgba, pt1, new Point(pt1.x, pt1.y - m), LINE_COLOR0, LINE_THICKNESS);
+                    break;
+            }
         }
     }
 

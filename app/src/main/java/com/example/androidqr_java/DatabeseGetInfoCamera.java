@@ -69,6 +69,7 @@ public class DatabeseGetInfoCamera {
                             id = Json.getString("id");
                             nickname = Json.getString("nickname");
                             info = Json.getString("info");
+                            Log.i("mmmmm","dgic 野中");
                             frag=1;
                         } catch (Exception e) {
                             Log.i("mmmmmm", "String to Json Failure");

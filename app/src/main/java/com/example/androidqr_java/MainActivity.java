@@ -140,6 +140,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView buttonBatu;
     private AnimationDrawable batu_animation;
     private FlingAnimation batu_dynamicAnimation;
+    //プログレスアニメーション
+    boolean progress_anim = false;
+    private ImageView progressAnimImage;
+    private AnimationDrawable progressAnimationDrawable;
 
     //url
     private String GAS_URL;
@@ -193,9 +197,11 @@ public class MainActivity extends AppCompatActivity {
         binding.maNickname.setText(account_nickname);
 
         //topAnimation
-        //横移動
+        //xボタン
         batu_dynamicAnimation = new FlingAnimation(binding.maTopLayout, DynamicAnimation.TRANSLATION_X);
         batu_dynamicAnimation.setFriction(0.85f);
+        //プログレス
+
 
         //✕ボタン
         buttonBatu = binding.maBatuHam;
@@ -269,7 +275,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     QrToDialogFragment QrToDF;
-    String qr_to_id;
     public static class QrToDialogFragment extends DialogFragment {
         MainActivity context;
         String id;
@@ -289,14 +294,15 @@ public class MainActivity extends AppCompatActivity {
             //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             // OK ボタンのリスナ
-            dialog.findViewById(R.id.dialog_qr_to_button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("mmmmm","いいね！");
-                    context.set_ma_cc(id);
-                    dismiss();
-                }
-            });
+            dialog.findViewById(R.id.dialog_qr_to_button)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.i("mmmmm","いいね！");
+                            context.set_ma_cc(id);
+                            dismiss();
+                        }
+                    });
 
             return dialog;
         }
@@ -794,6 +800,11 @@ public class MainActivity extends AppCompatActivity {
         //cameraへ移動
         homeCAMERA = findViewById(R.id.ma_scan_stroke);
         homeCAMERA.setOnClickListener(nvoCamera);
+
+        //progress
+        //progressアニメーション
+        progressAnimImage = findViewById(R.id.ma_qr_progress);
+        progressAnimationDrawable = (AnimationDrawable) progressAnimImage.getBackground();
     }
 
     public void set_ma_cc (String id) {
@@ -803,6 +814,7 @@ public class MainActivity extends AppCompatActivity {
         DatabeseGetInfoCamera dGIC = new DatabeseGetInfoCamera(GAS_URL,id);
         dGIC.SetMyInfo();
         //---------------------------------------------
+        Log.i("mmmmm","dgic");
         Handler mainHandler = new Handler(Looper.getMainLooper());
         Runnable r = new Runnable() {
             @Override
@@ -810,141 +822,7 @@ public class MainActivity extends AppCompatActivity {
                 if(dGIC.getFrag() == 1){
                     String otherNick = dGIC.getNickname();
                     String otherInfo = dGIC.getInfo();
-
                     cc_makeRecycler(otherInfo,otherNick);
-/*
-                    //sharedPref = MainActivity.this.getSharedPreferences(getString(R.string.sp_account), getApplication().MODE_PRIVATE);
-                    //String number = sharedPref.getString(getString(R.string.sp_ac_info_number), null);
-                    String[] myNumberArray = number.split("-");
-                    String[] othersNumberArray = otherInfo.split("-");
-
-                    List<String> matchNumberList = new ArrayList<String>();
-                    List<String> myNumberList = new ArrayList<String>();
-                    List<String> otherNumberList = new ArrayList<String>();
-
-                    for(int i = 0; i < 10; i++){
-                        for(int x = 0; x < 10; x++){
-                            if(myNumberArray[i].equals(othersNumberArray[x])){
-                                matchNumberList.add(myNumberArray[i]);
-                                break;
-                            }
-                        }
-                    }
-
-                    if(matchNumberList.size() > 0) {
-                        for (int i = 0; i < 10; i++) {
-                            for (int x = 0; x < matchNumberList.size(); x++) {
-                                if (!(matchNumberList.get(x).equals(myNumberArray[i]))) {
-                                    if (x == matchNumberList.size()-1) {
-                                        myNumberList.add(myNumberArray[i]);
-                                    }
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-
-                        for (int i = 0; i < 10; i++) {
-                            for (int x = 0; x < matchNumberList.size(); x++) {
-                                if (!(matchNumberList.get(x).equals(othersNumberArray[i]))){
-                                    if(x == matchNumberList.size()-1)
-                                        otherNumberList.add(othersNumberArray[i]);
-                                }
-                                else{
-                                    break;
-                                }
-                            }
-                        }
-
-                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.othersList_matchRecycler);
-                        recyclerView.setHasFixedSize(true);
-                        recyclerView.setLayoutManager(
-                                new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false)
-                        );
-                        recyclerView.setAdapter(new RecyclerViewAdapter_ma_cc_match(MainActivity.this, matchNumberList));
-                    }
-                    else{
-                        for(int i = 0; i < 10; i++){
-                            myNumberList.add(myNumberArray[i]);
-                            otherNumberList.add(othersNumberArray[i]);
-                        }
-                    }
-
-                    if(myNumberList.size() > 0){
-
-                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.othersList_nonRecycler_my);
-                        recyclerView.setHasFixedSize(true);
-                        recyclerView.setLayoutManager(
-                                new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false)
-                        );
-                        recyclerView.setAdapter(new RecyclerViewAdapter_ma_cc_non(MainActivity.this,myNumberList));
-
-                        recyclerView = (RecyclerView) findViewById(R.id.othersList_nonRecycler_others);
-                        recyclerView.setHasFixedSize(true);
-                        recyclerView.setLayoutManager(
-                                new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false)
-                        );
-                        recyclerView.setAdapter(new RecyclerViewAdapter_ma_cc_non(MainActivity.this,otherNumberList));
-                    }
-
-                    TextView matchText = findViewById(R.id.othersList_matchText);
-                    String text;
-                    switch (matchNumberList.size()){
-                        case 0:
-                            text = "Too bad";
-                            break;
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                            text = "Good!";
-                            break;
-                        case 5:
-                        case 6:
-                        case 7:
-                        case 8:
-                        case 9:
-                            text = "Great!!";
-                            break;
-                        case 10:
-                            text = "Excellent!!!";
-                            break;
-                        default:
-                            text = "error";
-                    }
-                    matchText.setText(text);
-
-                    TextView myNickView = findViewById(R.id.othersList_myNickname);
-                    myNickView.setText(account_nickname);
-                    TextView otherNickView = findViewById(R.id.othersList_otherNickname);
-                    otherNickView.setText(otherNick);
-                    TextView matchCount = findViewById(R.id.othersList_matchCount);
-                    matchCount.setText(matchNumberList.size() + "/10");
-                    findViewById(R.id.othersList_matchCount_text).setVisibility(View.VISIBLE);
-                    findViewById(R.id.ma_cc_load).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.ma_cc_progressBar).setVisibility(View.INVISIBLE);
-
-                    /*
-                    //up_accessに追加
-                    DatabaseAccess dA = new DatabaseAccess(GAS_URL, account_id, id);
-                    dA.access();
-                    Handler accessHandler = new Handler(Looper.getMainLooper());
-                    Runnable r = new Runnable() {
-                        @Override
-                        public void run() {
-                            if (dA.getFrag() != 2) {
-                                Log.i("mmmmmm", "ook");
-                                setDGH();
-                            } else {
-                                //待ち
-                                Log.i("mmmmmm", "ssk");
-                                accessHandler.postDelayed(this, 300);
-                            }
-                        }
-                    };
-                    accessHandler.post(r);
-                    //---------------------------------------
-                    */
                 }
                 else if(dGIC.getFrag() == 0){
                     Log.i("mmmmm","undefined set_ma_cc");
@@ -1124,12 +1002,16 @@ public class MainActivity extends AppCompatActivity {
                         Log.i("mmmmmm", "ook");
                         ImageView imageView = (ImageView) findViewById(R.id.imageView);
                         imageView.setImageResource(R.drawable.aim_trans);
+                        progressAnimationDrawable.stop();
+                        progressAnimImage.setVisibility(View.INVISIBLE);
                         qrcode_frag = false;
                         qrRun_state_frag = false;
                     } else {
                         //待ち
                         Log.i("mmmmmm", "ssk");
                         mainHandler.postDelayed(this, 300);
+                        progressAnimImage.setVisibility(View.VISIBLE);
+                        progressAnimationDrawable.start();
                     }
                 }
             };
@@ -1172,6 +1054,9 @@ public class MainActivity extends AppCompatActivity {
                             ImageView imageView = (ImageView) findViewById(R.id.imageView);
                             imageView.setImageBitmap(qrCodeBitmap);
 
+                            progressAnimationDrawable.stop();
+                            progressAnimImage.setVisibility(View.INVISIBLE);
+
                             Handler mainHandler = new Handler(Looper.getMainLooper());
                             DatabaseCheckRandom dCR = new DatabaseCheckRandom(GAS_URL, ULID, account_id,MainActivity.this);
                             //5秒待ち
@@ -1186,8 +1071,8 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     if(dCR.getFrag() == 1) {
-                                        /////////////////////////
-                                        QrToDF = new QrToDialogFragment(MainActivity.this,dCR.getId());
+                                        ///////////////////////
+                                        QrToDF = new QrToDialogFragment(MainActivity.this, dCR.getId());
                                         QrToDF.show(getSupportFragmentManager(), "game");
                                     }
                                     else {
@@ -1204,6 +1089,9 @@ public class MainActivity extends AppCompatActivity {
                         //待ち
                         Log.i("mmmmmm", "ssk");
                         mainHandler.postDelayed(this, 300);
+
+                        progressAnimImage.setVisibility(View.VISIBLE);
+                        progressAnimationDrawable.start();
                     }
                 }
             };
@@ -1433,6 +1321,8 @@ public class MainActivity extends AppCompatActivity {
             case qr:
                 homeQR.setEnabled(frag);
                 homeCAMERA.setEnabled(frag);
+                if(frag && qrRun_state_frag) progressAnimationDrawable.start();
+                else if(!frag && qrRun_state_frag) progressAnimationDrawable.stop();
                 break;
             case myList:
                 myListSwitch.setEnabled(frag);
