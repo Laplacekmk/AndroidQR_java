@@ -72,7 +72,7 @@ public class DatabaseCheckRandom {
                         }
                         //context.set_ma_cc(id);
                     }
-                    else if(count < 5){
+                    else if(context.qrcode_frag && count < 5){
                         checkRandom();
                         Log.i("mmmmm","みつからｎ");
                     }
