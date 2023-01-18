@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:id="@+id/history_item_w_img"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ma_history_item_w"/>
+    <TextView
+        android:id="@+id/history_item_w_nick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/deepGray"
+        app:layout_constraintTop_toTopOf="@id/history_item_w_img"
+        app:layout_constraintBottom_toBottomOf="@id/history_item_w_img"
+        app:layout_constraintLeft_toLeftOf="@id/history_item_w_img"
+        app:layout_constraintRight_toLeftOf="@id/history_item_w_count"
+        app:layout_constraintHorizontal_bias="0.2"/>
+    <TextView
+        android:id="@+id/history_item_w_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="@id/history_item_w_img"
+        app:layout_constraintBottom_toBottomOf="@id/history_item_w_img"
+        app:layout_constraintLeft_toLeftOf="@id/history_item_w_img"
+        app:layout_constraintRight_toRightOf="@id/history_item_w_img"
+        app:layout_constraintHorizontal_bias="0.7"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

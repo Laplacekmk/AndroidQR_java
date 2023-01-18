@@ -2,46 +2,179 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ma_constraintLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/gradient_ma_list">
 
-    <EditText
-        android:id="@+id/edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autofillHints="@string/hint"
-        android:background="#ffffff"
-        android:hint="@string/hint"
-        android:inputType="text"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toTopOf="@id/button_QR"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1"/> <!--下の制約（この場合はbuttonQR）に張り付く-->
-
-    <Button
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ma_home"
+        android:background="@color/clear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create QR Code"
-        android:id="@+id/button_QR"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center" />
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--アクションバー-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ma_topLayout"
+        android:layout_width="600dp"
+        android:layout_height="match_parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        android:background="@drawable/ma_toplay_back"
+        android:animateLayoutChanges="true">
+        <ImageView
+            android:id="@+id/ma_nickname_pen"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:layout_constraintTop_toTopOf="@id/ma_nickname"
+            app:layout_constraintBottom_toBottomOf="@id/ma_nickname"
+            app:layout_constraintLeft_toRightOf="@id/ma_nickname"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ma_pen"/>
+        <TextView
+            android:id="@+id/ma_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text="@string/nickname"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="70dp"/>
+        <EditText
+            android:id="@+id/ma_nickname_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textSize="30dp"
+            android:hint="@string/nickname"
+            app:layout_constraintTop_toTopOf="@id/ma_nickname"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:maxLength="10"/>
+        <ImageView
+            android:id="@+id/ma_nickname_check"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="@id/ma_nickname_edit"
+            app:layout_constraintBottom_toBottomOf="@id/ma_nickname_edit"
+            app:layout_constraintLeft_toRightOf="@id/ma_nickname_edit"
+            android:background="@drawable/ma_nickname_check_gray"
+            android:visibility="invisible"/>
+        <Button
+            android:id="@+id/ma_qrScreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:text="@string/ma_qrScreen"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_bias="0.25"/>
+        <Button
+            android:id="@+id/ma_myList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:text="@string/ma_myList"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_bias="0.4"/>
+        <Button
+            android:id="@+id/ma_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ma_othersList"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_bias="0.55"/>
+        <Button
+            android:id="@+id/ma_accountChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:text="@string/ma_accountChange"
+            android:background="@color/clear"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_bias="0.67"/>
+        <Button
+            android:id="@+id/ma_google"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="@string/google"
+            android:textColor="@color/deepGray"
+            android:textSize="11sp"
+            android:padding="1dp"
+            android:background="@drawable/login_button_back_google"
+            app:layout_constraintTop_toBottomOf="@id/ma_accountChange"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@id/ma_line"
+            app:layout_constraintHorizontal_bias="0.6"/>
+        <Button
+            android:id="@+id/ma_line"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="@string/line"
+            android:textColor="@color/deepGray"
+            android:textSize="11sp"
+            android:padding="1dp"
+            android:background="@drawable/login_button_back"
+            app:layout_constraintTop_toBottomOf="@id/ma_accountChange"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/ma_google"
+            app:layout_constraintHorizontal_bias="0.4"/>
+        <Button
+            android:id="@+id/ma_signOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ma_signOut"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_bias="0.85"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <ImageView
+        android:id="@+id/ma_batu_ham"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/ma_animation_batu10"/>
+
+    <!--ロード中の黒画面-->
+    <ImageView
+        android:id="@+id/ma_load"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <!--プログレスダイアログ-->
+    <ProgressBar
+        android:id="@+id/ma_progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/button_QR"
+        android:visibility="invisible"
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@color/teal_200"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp" />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

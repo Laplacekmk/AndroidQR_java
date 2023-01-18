@@ -1,4 +1,58 @@
 <resources>
     <string name="app_name">AndroidQR_java</string>
+    <string name="createQR">create QRcode</string>
     <string name="hint">add text</string>
+    <string name="createAccount">アカウント作成</string>
+    <!--database-->
+    <string name="add">add</string>
+    <string name="login">login</string>
+    <string name="logout">logout</string>
+    <string name="update">update</string>
+    <string name="access">access</string>
+    <string name="confirm">confirm</string>
+    <string name="getOthersInfo">getOthersInfo</string>
+    <string name="existence">existence</string>
+    <!--google-->
+    <string name="login_google">Googleでログイン</string>
+    <string name="google">google</string>
+    <string name="server_client_id">672366818124-qvd8n08dll3m57f9nq0p2koc2rcd27i7.apps.googleusercontent.com</string>
+    <string name="GAS_URL">https://script.google.com/macros/s/AKfycbxYzuFG4LkVgeeTkiBopWwlgp2ujaGSLeLP-GKztD8UeKh2S7HgfMCQjt03aMMJJ5Py/exec</string>
+    <string name="MediaType">application/json; charset=utf-8</string>
+    <string name="pre_googleSignInCheck">pre_googleSignInAccount</string>
+    <!--line-->
+    <string name="login_line">LINEでログイン</string>
+    <string name="line">LINE</string>
+    <string name="chanelID">1657747561</string>
+    <string name="pre_lineSignInCheck">pre_LineSignInAccount</string>
+    <!--createAccount-->
+    <string name="nickname_edit">ニックネームを入力してください</string>
+    <string name="nickname_kome">※10文字以内</string>
+    <string name="nickname_next">決定してつぎへ</string>
+    <string name="nickname">nickname</string>
+    <string name="caa_top">好きなものを選んでください</string>
+    <string name="caa_next">確認</string>
+    <string name="caa_back">戻る</string>
+    <string name="caa_check">選択した項目</string>
+    <string name="caa_complete">完了</string>
+    <string name="GorL">ログイン時に使用するアカウント</string>
+    <string name="or">or</string>
+    <!--MainActivity-->
+    <string name="ma_home">I・AM</string>
+    <string name="ma_camera">camera</string>
+    <string name="ma_qrcode">QRcode</string>
+    <string name="ma_scan">scan</string>
+    <!--MainActivity-->
+    <string name="ma_qrScreen">QR 画面</string>
+    <string name="ma_myList">自分の項目</string>
+    <string name="ma_othersList">履歴</string>
+    <string name="ma_accountChange">アカウント切り替え</string>
+    <string name="ma_signOut">サインアウト</string>
+    <!--アカウント情報のSharedPreferences-->
+    <string name="sp_account">SharedPreferencesAccount</string>
+    <string name="sp_ac_id">SharedPreferencesAccountId</string>
+    <string name="sp_ac_nickname">SharedPreferencesAccountNickname</string>
+    <string name="sp_ac_info_name">SharedPreferencesAccountInformationName</string>
+    <string name="sp_ac_info_number">SharedPreferencesAccountInformationNumber</string>
+    <string name="sp_ac_gmail">SharedPreferencesAccountGmail</string>
+    <string name="sp_ac_lineID">SharedPreferencesAccountLineID</string>
 </resources>

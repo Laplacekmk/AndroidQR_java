@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- カメラの使用を宣言、許可取り -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- ユーザーアカウント取得用パーミッション -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" /> <!-- インターネット -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,9 +19,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidQR_java"
-        tools:targetApi="31">
+        tools:replace="android:allowBackup"
+        tools:targetApi="32">
         <activity
-            android:name=".MainActivity"
+            android:name=".CreateAccountGorLActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".CreateAccountNicknameActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".CreateAccountActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".SignInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +54,36 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+        </activity> <!-- カメラ画面 -->
+        <activity
+            android:name=".CameraView"
+            android:exported="false">
+
+            <!-- API レベル 15 以下をサポートする場合は、メタデータ タグが必要 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SignInActivity" />
+        </activity> <!-- QR code作成画面 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SignInActivity" />
         </activity>
+        <activity
+            android:name=".SecondActivity"
+            android:exported="false">
+
+            <!-- API レベル 15 以下をサポートする場合は、メタデータ タグが必要 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SignInActivity" />
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

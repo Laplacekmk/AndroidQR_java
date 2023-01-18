@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/activity_main_home">
+
+    <!--progress-->
+    <ImageView
+        android:id="@+id/ma_qr_progress"
+        android:layout_width="200dp"
+        android:layout_height="12dp"
+        app:layout_constraintBottom_toTopOf="@id/imageView"
+        app:layout_constraintLeft_toLeftOf="@id/imageView"
+        app:layout_constraintRight_toRightOf="@id/imageView"
+        android:layout_margin="10dp"
+        android:background="@drawable/progress_animation_list"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/ma_scan_stroke"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7"
+        app:srcCompat="@drawable/ma_aim" />
+    <ImageView
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:id="@+id/ma_scan_stroke"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/ma_scan"
+        app:layout_constraintTop_toTopOf="@id/ma_scan"
+        app:srcCompat="@drawable/ma_button_stroke"/>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:id="@+id/ma_scan"
+        app:layout_constraintLeft_toLeftOf="@id/ma_scan_stroke"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintVertical_bias="0.2"
+        app:srcCompat="@drawable/ma_scan"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ma_scan"
+        android:textSize="33dp"
+        android:textColor="@color/black"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@id/ma_scan_stroke"
+        app:layout_constraintTop_toTopOf="@id/ma_scan_stroke"
+        app:layout_constraintLeft_toRightOf="@id/ma_scan"
+        app:layout_constraintRight_toRightOf="@id/ma_scan_stroke"
+        app:layout_constraintHorizontal_bias="0.3"/>
+    <ImageView
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:id="@+id/ma_qrcode_stroke"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ma_scan_stroke"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@drawable/ma_button_stroke" />
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:id="@+id/ma_qrcode"
+        app:layout_constraintBottom_toBottomOf="@id/ma_qrcode_stroke"
+        app:layout_constraintTop_toTopOf="@id/ma_qrcode_stroke"
+        app:layout_constraintLeft_toLeftOf="@id/ma_qrcode_stroke"
+        app:srcCompat="@drawable/ma_qrcode2" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ma_qrcode"
+        android:textSize="30dp"
+        android:textColor="@color/black"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@id/ma_qrcode_stroke"
+        app:layout_constraintTop_toTopOf="@id/ma_qrcode_stroke"
+        app:layout_constraintLeft_toRightOf="@id/ma_qrcode"
+        app:layout_constraintRight_toRightOf="@id/ma_qrcode_stroke"
+        app:layout_constraintHorizontal_bias="0.3"/>
+<!--
+    <ImageView
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:id="@+id/ma_info"
+        app:layout_constraintTop_toBottomOf="@id/ma_qrcode_stroke"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="30dp"
+        app:srcCompat="@drawable/ma_button_info"  />
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        app:layout_constraintBottom_toBottomOf="@id/ma_info"
+        app:layout_constraintTop_toTopOf="@id/ma_info"
+        app:layout_constraintLeft_toLeftOf="@id/ma_info"
+        app:srcCompat="@drawable/ma_information" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="aaaaa"
+        android:textSize="30dp"
+        android:textColor="@color/black"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@id/ma_info"
+        app:layout_constraintTop_toTopOf="@id/ma_info"
+        app:layout_constraintLeft_toRightOf="@id/ma_qrcode"
+        app:layout_constraintRight_toRightOf="@id/ma_info"
+        app:layout_constraintHorizontal_bias="0.3"/>
+-->
+</androidx.constraintlayout.widget.ConstraintLayout>
